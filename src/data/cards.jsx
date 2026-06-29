@@ -120,7 +120,7 @@ const storyVsTask = {
       <Flow>
         <St type="open">Open</St>
         <St type="prog">In Progress</St>
-        <St type="ready">Dev Ready</St>
+        <St type="devready">Dev Ready</St>
         <St type="ready">QA Ready</St>
         <St type="verify">QA Verified</St>
         <St type="ready">PREP Ready</St>
@@ -139,11 +139,128 @@ const storyVsTask = {
   ),
 }
 
+const childStatus = {
+  id: 'child-status',
+  title: '子票狀態切換',
+  roles: ['PM', 'RD', 'QA'],
+  phases: ['foundation'],
+  contexts: 'all',
+  content: (
+    <>
+      <Callout type="info">
+        子票（DEV-Task / QA-Task）的狀態切換視有無 <strong>GitLab MR 連動</strong>而不同。
+      </Callout>
+      <Tbl>
+        <tr>
+          <th style={{ width: '36%' }}>狀態切換</th>
+          <th>有 GitLab MR 連動</th>
+          <th>無 GitLab MR 連動</th>
+        </tr>
+        <tr>
+          <td><St type="open">Open</St> → <St type="prog">In Progress</St></td>
+          <td colSpan={2} style={{ textAlign: 'center', color: '#42526E' }}>✋ 手動（開始執行時）</td>
+        </tr>
+        <tr>
+          <td><St type="prog">In Progress</St> → <St type="review">In Review</St></td>
+          <td>⚡ 自動（MR Create）</td>
+          <td>✋ 手動</td>
+        </tr>
+        <tr>
+          <td><St type="review">In Review</St> → <St type="done">Done</St></td>
+          <td>⚡ 自動（MR Merged）</td>
+          <td>✋ 手動</td>
+        </tr>
+      </Tbl>
+    </>
+  ),
+}
+
+const parentStatus = {
+  id: 'parent-status',
+  title: '母票狀態切換',
+  roles: ['PM', 'RD', 'QA'],
+  phases: ['foundation'],
+  contexts: 'all',
+  content: (
+    <>
+      <Callout type="info">
+        母票狀態由 Jira Automation 根據子票狀態自動推進，
+        僅在<strong>驗證環節</strong>需手動切換。
+      </Callout>
+
+      <p style={{ marginTop: 10, fontSize: 12, fontWeight: 600, color: '#172B4D' }}>Story / Bug</p>
+      <Tbl style={{ marginTop: 4 }}>
+        <tr><th style={{ width: '42%' }}>狀態切換</th><th style={{ width: '20%' }}>方式</th><th>觸發條件</th></tr>
+        <tr>
+          <td><St type="open">Open</St> → <St type="prog">In Progress</St></td>
+          <td>⚡ 自動</td>
+          <td>任一子票進入 In Progress</td>
+        </tr>
+        <tr>
+          <td><St type="prog">In Progress</St> → <St type="devready">Dev Ready</St></td>
+          <td>⚡ 自動</td>
+          <td>所有子票 Done</td>
+        </tr>
+        <tr>
+          <td> → <St type="ready">QA / PREP / Prod Ready</St></td>
+          <td>⚡ 自動</td>
+          <td>程式碼部署至 QA / PREP / Prod 環境</td>
+        </tr>
+        <tr>
+          <td> → <St type="verify">QA / PREP Verified</St> <St type="done">Done</St></td>
+          <td>✋ 手動</td>
+          <td>QA 在 QA / PREP / Prod 環境驗證通過</td>
+        </tr>
+        {/* <tr>
+          <td><St type="verify">QA Verified</St> → <St type="ready">PREP Ready</St></td>
+          <td>⚡ 自動</td>
+          <td>程式碼部署至 PREP 環境</td>
+        </tr>
+        <tr>
+          <td><St type="ready">PREP Ready</St> → <St type="verify">PREP Verified</St></td>
+          <td>✋ 手動</td>
+          <td>QA 在 PREP 環境驗證通過</td>
+        </tr>
+        <tr>
+          <td><St type="verify">PREP Verified</St> → <St type="ready">Prod Ready</St></td>
+          <td>⚡ 自動</td>
+          <td>程式碼部署至 Prod 環境</td>
+        </tr>
+        <tr>
+          <td><St type="ready">Prod Ready</St> → <St type="done">Done</St></td>
+          <td>✋ 手動</td>
+          <td>QA 在 Prod 環境驗證通過</td>
+        </tr> */}
+      </Tbl>
+
+      <p style={{ marginTop: 10, fontSize: 12, fontWeight: 600, color: '#172B4D' }}>Task</p>
+      <Tbl style={{ marginTop: 4 }}>
+        <tr><th style={{ width: '42%' }}>狀態切換</th><th style={{ width: '20%' }}>方式</th><th>觸發條件</th></tr>
+        <tr>
+          <td><St type="open">Open</St> → <St type="prog">In Progress</St></td>
+          <td>⚡ 自動</td>
+          <td>任一子票進入 In Progress</td>
+        </tr>
+        <tr>
+          <td><St type="prog">In Progress</St> → <St type="review">In Review</St></td>
+          <td>⚡ 自動</td>
+          <td>所有子票 Done</td>
+        </tr>
+        <tr>
+          <td><St type="review">In Review</St> → <St type="done">Done</St></td>
+          <td>✋ 手動</td>
+          <td>Reviewer 驗證確認後操作</td>
+        </tr>
+      </Tbl>
+    </>
+  ),
+}
+
 // ─────────────────────────── Sprint 規劃前 ───────────────────────────
 
 const dor = {
   id: 'dor',
-  title: 'DoR — 需求就緒條件',
+  title: '需求就緒',
   roles: ['PM', 'RD', 'QA'],
   phases: ['pre-sprint'],
   contexts: 'all',
@@ -161,8 +278,8 @@ const dor = {
 
 const estimatedEffort = {
   id: 'estimated-effort',
-  title: '需求粗估（Estimated Effort）',
-  roles: ['PM'],
+  title: '需求粗估（Optional）',
+  roles: ['PM', 'RD'],
   phases: ['pre-sprint'],
   contexts: ['pm-planning'],
   content: (
@@ -175,7 +292,7 @@ const estimatedEffort = {
             <li>仍要粗估時，在單上 Comment 備註不確定性</li>
           </Bullets>
         </li>
-        <li>將粗估點數填入 Story 的 <code>Estimated Effort</code> 欄位</li>
+        <li>將粗估點數填入 Story 或 Epic 的 <code>Estimated Effort</code> 欄位</li>
       </Steps>
       <Callout type="info">粗估目的是幫助排程與決策，<strong>不代表</strong>實際開發點數。</Callout>
     </>
@@ -184,7 +301,7 @@ const estimatedEffort = {
 
 const sprintPlanning = {
   id: 'sprint-planning',
-  title: 'Sprint 規劃 — 需求排序',
+  title: '規劃 Sprint 需求並排序',
   roles: ['PM'],
   phases: ['pre-sprint'],
   contexts: ['pm-sprint'],
@@ -204,7 +321,7 @@ const sprintPlanning = {
 
 const specConfirm = {
   id: 'spec-confirm',
-  title: 'Sprint 規劃 — SPEC & A/C 確認',
+  title: 'SPEC & A/C 確認',
   roles: ['RD', 'QA'],
   phases: ['pre-sprint'],
   contexts: ['rd-dev', 'qa-testing'],
@@ -224,14 +341,14 @@ const specConfirm = {
 const splitSubtask = {
   id: 'split-subtask',
   title: '拆子單 & 估點',
-  roles: ['RD'],
+  roles: ['RD', 'QA'],
   phases: ['pre-sprint'],
   contexts: ['rd-dev'],
   content: (
     <>
       <Steps>
-        <li>在母單下建立 DEV-Task 與 QA-Task</li>
-        <li>單一子單點數不超過 <strong>10 點</strong>，若超過需拆分</li>
+        <li>母單下會建立 DEV-Task 與 QA-Task，若發現有缺少或想進行任務拆分請自行添加</li>
+        <li>單一子單點數不超過 <strong>10 點</strong>，若超過需拆分 (建議)</li>
         <li>所有子單完成估點（<code>Story Points</code>）
           <Bullets sub style={{ marginTop: 4 }}>
             <li>建議採用團隊估點，幫助對齊目標</li>
@@ -239,9 +356,6 @@ const splitSubtask = {
           </Bullets>
         </li>
       </Steps>
-      <Callout type="warning">
-        Sprint 中的插單由團隊自行決定估點方式，不強制團隊估點。
-      </Callout>
     </>
   ),
 }
@@ -566,6 +680,8 @@ export const CARDS = [
   taskHierarchy,
   pointsRules,
   storyVsTask,
+  childStatus,
+  parentStatus,
   dor,
   estimatedEffort,
   sprintPlanning,
