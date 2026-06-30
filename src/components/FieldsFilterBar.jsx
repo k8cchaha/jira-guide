@@ -4,7 +4,7 @@ import { ISSUE_TYPE_GROUPS, TIMINGS } from '../data/fields'
 export function FieldsFilterBar({ active, onToggle, visible, total }) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  const activeCount = active.role.size + active.issueType.size + active.timing.size
+  const activeCount = active.role.size + active.issueType.size + active.timing.size + (active.required ? 1 : 0)
 
   return (
     <div className="filter-bar">
@@ -65,6 +65,17 @@ export function FieldsFilterBar({ active, onToggle, visible, total }) {
               ))}
             </div>
           </div>
+
+          <div className="divider" />
+
+          <label className="required-checkbox">
+            <input
+              type="checkbox"
+              checked={active.required}
+              onChange={() => onToggle('required')}
+            />
+            <span>必填</span>
+          </label>
 
           <span className="result-count">顯示 {visible} / {total} 項</span>
         </div>

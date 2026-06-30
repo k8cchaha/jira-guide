@@ -262,6 +262,17 @@ code {
 .chip.active[data-value="pre-sprint"]      { background: #FF8B00; border-color: #FF8B00; }
 .chip.active[data-value="on-complete"]     { background: #00875A; border-color: #00875A; }
 
+/* Required checkbox in filter bar */
+.required-checkbox {
+  display: flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 12px; font-weight: 600; color: #42526E;
+  white-space: nowrap; user-select: none;
+}
+.required-checkbox input[type="checkbox"] {
+  width: 14px; height: 14px; cursor: pointer;
+  accent-color: #DE350B;
+}
+
 /* FIELDS TABLE */
 .fields-table-wrap {
   grid-column: 1 / -1;
@@ -296,7 +307,11 @@ code {
 .col-meta  { display: none; }
 
 .field-name {
-  display: block; font-weight: 600; color: #0052CC; font-size: 13px;
+  display: block; font-weight: 600; color: #0052CC; font-size: 13px; position: relative;
+}
+.required-mark {
+  color: #DE350B; font-size: 11px; font-weight: 700;
+  margin-left: 2px; vertical-align: super; line-height: 1;
 }
 .field-def {
   display: block; font-size: 12px; color: #6B778C; margin-top: 2px;

@@ -28,7 +28,10 @@ export function FieldsTable({ fields }) {
           {fields.map(field => (
             <tr key={field.id}>
               <td className="col-name">
-                <span className="field-name">{field.name}</span>
+                <span className="field-name">
+                  {field.name}
+                  {field.required && <span className="required-mark" aria-label="必填">＊</span>}
+                </span>
                 <span className="field-def">{field.definition}</span>
               </td>
               <td className="col-usage">{field.usage}</td>

@@ -23,6 +23,7 @@ export const FIELDS = [
     roles: ['PM', 'RD', 'QA'],
     issueTypeGroups: ['all'],
     timing: ['on-create'],
+    required: true,
   },
   {
     id: 'description',
@@ -32,6 +33,7 @@ export const FIELDS = [
     roles: ['PM', 'RD', 'QA'],
     issueTypeGroups: ['all'],
     timing: ['on-create'],
+    required: true,
   },
   {
     id: 'assignee',
@@ -41,6 +43,7 @@ export const FIELDS = [
     roles: ['PM', 'RD', 'QA'],
     issueTypeGroups: ['all'],
     timing: [],
+    required: false,
   },
   {
     id: 'reporter',
@@ -50,6 +53,7 @@ export const FIELDS = [
     roles: [],
     issueTypeGroups: ['all'],
     timing: [],
+    required: false,
   },
   {
     id: 'components',
@@ -59,6 +63,7 @@ export const FIELDS = [
     roles: ['PM', 'RD', 'QA'],
     issueTypeGroups: ['all'],
     timing: ['pre-sprint'],
+    required: false,
   },
   {
     id: 'platforms',
@@ -68,6 +73,7 @@ export const FIELDS = [
     roles: [],
     issueTypeGroups: ['all'],
     timing: [],
+    required: false,
   },
   {
     id: 'sprint',
@@ -77,6 +83,7 @@ export const FIELDS = [
     roles: ['PM'],
     issueTypeGroups: ['all'],
     timing: ['pre-sprint'],
+    required: true,
   },
   {
     id: 'labels',
@@ -86,6 +93,7 @@ export const FIELDS = [
     roles: ['PM', 'RD', 'QA'],
     issueTypeGroups: ['all'],
     timing: [],
+    required: false,
   },
   {
     id: 'linked-issues',
@@ -95,6 +103,7 @@ export const FIELDS = [
     roles: ['PM', 'RD', 'QA'],
     issueTypeGroups: ['all'],
     timing: [],
+    required: false,
   },
   {
     id: 'parent',
@@ -104,6 +113,7 @@ export const FIELDS = [
     roles: ['PM', 'RD', 'QA'],
     issueTypeGroups: ['all'],
     timing: ['pre-sprint'],
+    required: true,
   },
   {
     id: 'start-date',
@@ -113,6 +123,7 @@ export const FIELDS = [
     roles: ['PM'],
     issueTypeGroups: ['all'],
     timing: ['pre-sprint'],
+    required: false,
   },
   {
     id: 'due-date',
@@ -122,6 +133,7 @@ export const FIELDS = [
     roles: ['PM'],
     issueTypeGroups: ['all'],
     timing: ['pre-sprint'],
+    required: false,
   },
   {
     id: 'fix-versions',
@@ -131,6 +143,7 @@ export const FIELDS = [
     roles: ['PM', 'RD'],
     issueTypeGroups: ['all'],
     timing: [],
+    required: false,
   },
   {
     id: 'resolution',
@@ -140,6 +153,7 @@ export const FIELDS = [
     roles: ['PM', 'RD', 'QA'],
     issueTypeGroups: ['all'],
     timing: ['on-complete'],
+    required: true,
   },
   {
     id: 'attachment',
@@ -149,6 +163,7 @@ export const FIELDS = [
     roles: ['PM', 'RD', 'QA'],
     issueTypeGroups: ['all'],
     timing: [],
+    required: false,
   },
   {
     id: 'comment',
@@ -158,6 +173,7 @@ export const FIELDS = [
     roles: ['PM', 'RD', 'QA'],
     issueTypeGroups: ['all'],
     timing: [],
+    required: false,
   },
   {
     id: 'note',
@@ -167,6 +183,7 @@ export const FIELDS = [
     roles: ['PM', 'RD', 'QA'],
     issueTypeGroups: ['all'],
     timing: [],
+    required: false,
   },
   // ─── 母單特定 ───
   {
@@ -177,6 +194,7 @@ export const FIELDS = [
     roles: ['PM'],
     issueTypeGroups: ['epic-story-task', 'bug'],
     timing: ['pre-sprint'],
+    required: false,
   },
   {
     id: 'release-package',
@@ -186,6 +204,7 @@ export const FIELDS = [
     roles: ['PM'],
     issueTypeGroups: ['epic-story-task', 'bug'],
     timing: ['pre-sprint'],
+    required: false,
   },
   {
     id: 'estimated-effort',
@@ -195,6 +214,7 @@ export const FIELDS = [
     roles: ['PM', 'RD'],
     issueTypeGroups: ['epic-story-task'],
     timing: ['pre-sprint'],
+    required: false,
   },
   {
     id: 'deadline',
@@ -204,6 +224,7 @@ export const FIELDS = [
     roles: ['PM'],
     issueTypeGroups: ['epic-story-task'],
     timing: ['pre-sprint'],
+    required: false,
   },
   // ─── 子單（DEV-Task / QA-Task）欄位 ───
   {
@@ -214,6 +235,7 @@ export const FIELDS = [
     roles: ['RD', 'QA'],
     issueTypeGroups: ['sub-task'],
     timing: ['pre-sprint'],
+    required: true,
   },
   {
     id: 'actual-story-points',
@@ -223,6 +245,7 @@ export const FIELDS = [
     roles: ['RD', 'QA'],
     issueTypeGroups: ['sub-task'],
     timing: ['on-complete'],
+    required: true,
   },
   {
     id: 'dev-type',
@@ -232,6 +255,7 @@ export const FIELDS = [
     roles: [],
     issueTypeGroups: ['sub-task'],
     timing: [],
+    required: false,
   },
   {
     id: 'deploy-status',
@@ -241,6 +265,7 @@ export const FIELDS = [
     roles: [],
     issueTypeGroups: ['sub-task'],
     timing: [],
+    required: false,
   },
   // ─── Bug 專屬 ───
   {
@@ -251,6 +276,7 @@ export const FIELDS = [
     roles: ['QA'],
     issueTypeGroups: ['bug'],
     timing: ['on-create'],
+    required: true,
   },
   {
     id: 'root-cause',
@@ -260,6 +286,7 @@ export const FIELDS = [
     roles: ['RD'],
     issueTypeGroups: ['bug'],
     timing: ['on-complete'],
+    required: true,
   },
   {
     id: 'solution',
@@ -269,6 +296,7 @@ export const FIELDS = [
     roles: ['RD'],
     issueTypeGroups: ['bug'],
     timing: ['on-complete'],
+    required: true,
   },
   {
     id: 'defect-cause',
@@ -278,6 +306,7 @@ export const FIELDS = [
     roles: ['RD'],
     issueTypeGroups: ['bug'],
     timing: ['on-complete'],
+    required: true,
   },
   {
     id: 'optimization-type',
@@ -287,6 +316,7 @@ export const FIELDS = [
     roles: [],
     issueTypeGroups: ['bug'],
     timing: [],
+    required: false,
   },
   {
     id: 'reopened-count',
@@ -296,5 +326,6 @@ export const FIELDS = [
     roles: [],
     issueTypeGroups: ['bug'],
     timing: [],
+    required: false,
   },
 ]

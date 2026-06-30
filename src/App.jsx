@@ -10,7 +10,7 @@ import { FIELDS } from './data/fields'
 
 const ALL_PHASE_IDS = PHASES.map(p => p.id)
 const EMPTY = { role: new Set(), phase: new Set(), context: new Set() }
-const FIELDS_EMPTY = { role: new Set(), issueType: new Set(), timing: new Set() }
+const FIELDS_EMPTY = { role: new Set(), issueType: new Set(), timing: new Set(), required: false }
 const LS_KEY = 'jira-guide-filters'
 
 function loadFromStorage() {
@@ -50,6 +50,7 @@ function isSectionOn(phaseId, activePhase) {
 }
 
 function isFieldVisible(field, active) {
+  if (active.required && !field.required) return false
   if (active.role.size > 0 && field.roles.length > 0 && !field.roles.some(r => active.role.has(r))) return false
   if (active.issueType.size > 0 && !field.issueTypeGroups.includes('all') && !field.issueTypeGroups.some(g => active.issueType.has(g))) return false
   if (active.timing.size > 0 && field.timing.length > 0 && !field.timing.some(t => active.timing.has(t))) return false
@@ -65,6 +66,7 @@ export default function App() {
 
   function toggleFieldsFilter(type, value) {
     setFieldsActive(prev => {
+      if (type === 'required') return { ...prev, required: !prev.required }
       const next = new Set(prev[type])
       if (next.has(value)) next.delete(value)
       else next.add(value)
