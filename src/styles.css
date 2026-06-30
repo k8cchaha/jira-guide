@@ -19,10 +19,11 @@ body {
 }
 .header-inner {
   max-width: 1280px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex;
 }
 .site-header h1 { font-size: 17px; font-weight: 700; letter-spacing: 0.2px; }
-.site-header .subtitle { font-size: 11px; opacity: 0.75; margin-top: 2px; }
+.site-header .subtitle { font-size: 11px; margin-top: 2px; color: rgba(255,255,255,0.6); }
+
 
 /* FILTER BAR */
 .filter-bar {
@@ -227,6 +228,101 @@ code {
   cursor: pointer; font-size: 13px; text-decoration: underline;
 }
 
+/* HEADER LAYOUT */
+.header-inner {
+  align-items: center; justify-content: space-between;
+}
+.header-left { display: flex; flex-direction: column; }
+.header-title-row { display: flex; align-items: baseline; gap: 8px; }
+.version-tag {
+  font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.1); padding: 1px 5px; border-radius: 3px;
+}
+
+/* Subtitle clickable words */
+.subtitle-tab {
+  cursor: pointer; color: rgba(255,255,255,0.5);
+  font-weight: 700;
+  transition: color 0.15s;
+}
+.subtitle-tab:hover { color: rgba(255,255,255,0.75); }
+.subtitle-tab.active {
+  color: #FFFFFF;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+}
+.subtitle-automation { color: rgba(255,255,255,0.5); font-weight: 700; }
+
+/* FIELDS FILTER — chip active colors */
+.chip.active[data-value="epic-story-task"] { background: #6554C0; border-color: #6554C0; }
+.chip.active[data-value="bug"]             { background: #DE350B; border-color: #DE350B; }
+.chip.active[data-value="sub-task"]        { background: #0052CC; border-color: #0052CC; }
+.chip.active[data-value="on-create"]       { background: #00B8D9; border-color: #00B8D9; }
+.chip.active[data-value="pre-sprint"]      { background: #FF8B00; border-color: #FF8B00; }
+.chip.active[data-value="on-complete"]     { background: #00875A; border-color: #00875A; }
+
+/* FIELDS TABLE */
+.fields-table-wrap {
+  grid-column: 1 / -1;
+  overflow-x: auto;
+  margin-top: 4px;
+}
+.fields-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13px; background: white;
+  border-radius: 6px; overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.fields-table thead tr {
+  background: #0052CC; color: white;
+}
+.fields-table th {
+  padding: 10px 14px; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.4px; text-align: left; white-space: nowrap;
+}
+.fields-table td {
+  padding: 10px 14px; border-bottom: 1px solid #F4F5F7;
+  vertical-align: top; color: #172B4D; line-height: 1.5;
+}
+.fields-table tbody tr:last-child td { border-bottom: none; }
+.fields-table tbody tr:nth-child(even) td { background: #FAFBFC; }
+.fields-table tbody tr:hover td { background: #EAF2FF; }
+
+.col-name  { width: 200px; }
+.col-usage { }
+.col-type  { width: 180px; }
+.col-who   { width: 150px; }
+.col-meta  { display: none; }
+
+.field-name {
+  display: block; font-weight: 600; color: #0052CC; font-size: 13px;
+}
+.field-def {
+  display: block; font-size: 12px; color: #6B778C; margin-top: 2px;
+}
+
+/* Issue Type chips in table */
+.it-chips { display: flex; flex-direction: column; gap: 4px; }
+.it-chip {
+  display: inline-block; padding: 2px 8px; border-radius: 3px;
+  font-size: 11px; font-weight: 600; color: white; white-space: nowrap;
+}
+.it-all              { background: #6B778C; }
+.it-epic-story-task  { background: #6554C0; }
+.it-bug              { background: #DE350B; }
+.it-sub-task         { background: #0052CC; }
+
+/* Who + timing cell */
+.who-cell { display: flex; flex-direction: column; gap: 4px; }
+.who-roles { display: flex; gap: 4px; flex-wrap: wrap; }
+.field-auto {
+  font-size: 11px; color: #00875A; font-weight: 600;
+}
+.who-timing {
+  font-size: 11px; color: #6B778C;
+}
+
 /* RESPONSIVE */
 @media (max-width: 720px) {
   .content { grid-template-columns: 1fr; padding: 0 12px 40px; }
@@ -241,4 +337,15 @@ code {
   .filter-bar-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
   .divider { width: 100%; height: 1px; }
   .result-count { margin-left: 0; }
+
+  /* Fields table: merge col-type + col-who into col-meta */
+  .col-type { display: none; }
+  .col-who  { display: none; }
+  .col-meta { display: table-cell; width: 110px; }
+  .col-name { width: 110px; }
+
+  .meta-combined {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .meta-combined .it-chips { flex-direction: column; }
 }

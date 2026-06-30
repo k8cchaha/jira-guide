@@ -2,11 +2,15 @@ import { useState, useMemo, useEffect } from 'react'
 import { Header } from './components/Header'
 import { FilterBar } from './components/FilterBar'
 import { Card } from './components/Card'
+import { FieldsFilterBar } from './components/FieldsFilterBar'
+import { FieldsTable } from './components/FieldsTable'
 import { PHASES, ROLE_CONTEXTS } from './data/filters'
 import { CARDS } from './data/cards'
+import { FIELDS } from './data/fields'
 
 const ALL_PHASE_IDS = PHASES.map(p => p.id)
 const EMPTY = { role: new Set(), phase: new Set(), context: new Set() }
+const FIELDS_EMPTY = { role: new Set(), issueType: new Set(), timing: new Set() }
 const LS_KEY = 'jira-guide-filters'
 
 function loadFromStorage() {
@@ -45,10 +49,28 @@ function isSectionOn(phaseId, activePhase) {
   return activePhase.size === 0 || activePhase.has(phaseId)
 }
 
+function isFieldVisible(field, active) {
+  if (active.role.size > 0 && field.roles.length > 0 && !field.roles.some(r => active.role.has(r))) return false
+  if (active.issueType.size > 0 && !field.issueTypeGroups.includes('all') && !field.issueTypeGroups.some(g => active.issueType.has(g))) return false
+  if (active.timing.size > 0 && field.timing.length > 0 && !field.timing.some(t => active.timing.has(t))) return false
+  return true
+}
+
 export default function App() {
+  const [mode, setMode] = useState('workflow')
   const [active, setActive] = useState(loadFromStorage)
+  const [fieldsActive, setFieldsActive] = useState(FIELDS_EMPTY)
 
   useEffect(() => { saveToStorage(active) }, [active])
+
+  function toggleFieldsFilter(type, value) {
+    setFieldsActive(prev => {
+      const next = new Set(prev[type])
+      if (next.has(value)) next.delete(value)
+      else next.add(value)
+      return { ...prev, [type]: next }
+    })
+  }
 
   function toggleFilter(type, value) {
     setActive(prev => {
@@ -95,7 +117,11 @@ export default function App() {
   }
 
   function resetFilters() {
-    setActive({ role: new Set(), phase: new Set(), context: new Set() })
+    if (mode === 'workflow') {
+      setActive({ role: new Set(), phase: new Set(), context: new Set() })
+    } else {
+      setFieldsActive(FIELDS_EMPTY)
+    }
   }
 
   const visibleCards = useMemo(
@@ -119,21 +145,37 @@ export default function App() {
 
   const totalVisible = visibleCards.size
 
+  const filteredFields = useMemo(
+    () => FIELDS.filter(f => isFieldVisible(f, fieldsActive)),
+    [fieldsActive]
+  )
+
   return (
     <>
       <div className="sticky-top">
-        <Header onReset={resetFilters} />
-        <FilterBar
-          active={active}
-          onToggle={toggleFilter}
-          onReset={resetFilters}
-          visible={totalVisible}
-          total={CARDS.length}
-        />
+        <Header mode={mode} onModeChange={setMode} onReset={resetFilters} />
+        {mode === 'workflow' && (
+          <FilterBar
+            active={active}
+            onToggle={toggleFilter}
+            onReset={resetFilters}
+            visible={totalVisible}
+            total={CARDS.length}
+          />
+        )}
+        {mode === 'fields' && (
+          <FieldsFilterBar
+            active={fieldsActive}
+            onToggle={toggleFieldsFilter}
+            visible={filteredFields.length}
+            total={FIELDS.length}
+          />
+        )}
       </div>
 
       <main className="content">
-        {sections.map(({ phase, cards, relevantCards, on }) => {
+        {mode === 'fields' && <FieldsTable fields={filteredFields} />}
+        {mode === 'workflow' && sections.map(({ phase, cards, relevantCards, on }) => {
           if (cards.length === 0) return null
           // Hide label entirely when no cards are relevant (e.g. role filter removes all)
           if (relevantCards.length === 0) return null
@@ -155,7 +197,7 @@ export default function App() {
           )
         })}
 
-        {totalVisible === 0 && (
+        {mode === 'workflow' && totalVisible === 0 && (
           <div className="no-results">
             <p>目前篩選條件無符合的內容</p>
             <p>請調整篩選條件，或<button onClick={resetFilters}>清除全部篩選</button></p>
