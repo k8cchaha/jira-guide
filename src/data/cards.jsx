@@ -21,7 +21,7 @@ import { Callout, Tbl, Steps, Bullets, Flow, St } from '../ui'
  *   <Flow><St type="open|prog|review|ready|verify|done">Label</St></Flow>
  */
 
-// ─────────────────────────── 基礎概念 ───────────────────────────
+// ─────────────────────────── 核心概念 ───────────────────────────
 
 const projectInfo = {
   id: 'project-info',
@@ -571,24 +571,31 @@ const abnormalClose = {
 
 const devTaskCarryover = {
   id: 'dev-task-carryover',
-  title: 'DEV-Task 跨 Sprint 處理',
-  roles: ['RD'],
+  title: '需求跨 Sprint 處理',
+  roles: ['PM', 'RD', 'QA'],
   phases: ['end-sprint'],
-  contexts: ['rd-dev'],
+  contexts: 'all',
   content: (
     <>
-      <p>若 DEV-Task 在該 Sprint 只完成部分，且已花費超過 1 個 Story Point：</p>
+      <p>以<strong>母票（Story / Task / Bug）</strong>為基準，判斷跨 Sprint 的處理方式：</p>
       <Steps style={{ marginTop: 8 }}>
-        <li>在 Parent 單下建立<strong>新的 DEV-Task</strong>（下個 Sprint 繼續）</li>
-        <li>調整<strong>原 DEV-Task</strong>：
+        <li>
+          <strong>完全未開始</strong>：直接將母票移至下個 Sprint
           <Bullets sub style={{ marginTop: 4 }}>
-            <li>補上描述：時間花在哪些內容</li>
-            <li>Story Points & Actual Story Points → 已花費點數</li>
-            <li>Status → <St type="done">Done</St></li>
+            <li>子單（DEV-Task / QA-Task）須與母票在<strong>同一個 Sprint</strong>，跟著一起移動</li>
           </Bullets>
         </li>
-        <li>填入新 DEV-Task 的 Story Points（下個 Sprint 的估點）</li>
+        <li>
+          <strong>已在進行中</strong>：母票留在當前 Sprint 繼續執行
+          <Bullets sub style={{ marginTop: 4 }}>
+            <li>Sprint <strong>不在到期時強制關閉</strong>，等到所有需求都 Done 才 Complete</li>
+            <li>Scrum Board 上同時存在<strong>多個 Sprint 是正常現象</strong>，不是異常</li>
+          </Bullets>
+        </li>
       </Steps>
+      <Callout type="warning" style={{ marginTop: 8 }}>
+        母票<strong>不存在部分完成</strong>。雖然一張母票下可以自由拆成多張 DEV-Task 進行任務切割，但母票本身需顧及功能完整性，只有「全部完成」或「尚未完成」兩種狀態。
+      </Callout>
     </>
   ),
 }
@@ -602,7 +609,7 @@ const sprintCoexist = {
   contexts: 'all',
   content: (
     <Bullets>
-      <li>部分需求（Story / Bug）需要完整的環境驗證，時間會超出 2 週的 Sprint 週期</li>
+      <li>從開發到環境部署、QA 驗證是<strong>完整的開發 Cycle</strong>，需求（Story / Bug）橫跨多個 Sprint 是正常流程，不是例外</li>
       <li>Sprint <strong>不在到期時強制關閉</strong>，等到所有需求都 Done 才 Complete</li>
       <li>Scrum Board 上同時存在<strong>多個 Sprint 是正常現象</strong>，不是異常</li>
     </Bullets>
@@ -635,9 +642,9 @@ const qaVerify = {
   ),
 }
 
-const uatBug = {
-  id: 'uat-bug',
-  title: 'UAT 客戶 Bug 處理',
+const prepBug = {
+  id: 'prep-bug',
+  title: 'PREP 客戶 Bug 處理',
   roles: ['QA'],
   phases: ['deploy'],
   contexts: ['qa-bug'],
@@ -647,6 +654,44 @@ const uatBug = {
       <li>先在 QA 環境確認是否能復現相同的 Bug</li>
       <li>確認可重現後，RD 建立 DEV-Task 進行修復</li>
     </Steps>
+  ),
+}
+
+const verifyFoundBug = {
+  id: 'verify-found-bug',
+  title: '驗證過程發現 Bug',
+  roles: ['QA'],
+  phases: ['deploy'],
+  contexts: ['qa-bug', 'qa-testing'],
+  content: (
+    <>
+      <Steps>
+        <li>開一張 <strong>Bug 單</strong></li>
+        <li>填寫完整 Description（Env / Pre-condition / Steps / Actual Result / Expected Result）</li>
+        <li>設定 Label、Release Package、Components、Assignee、<strong>Defect Type</strong></li>
+        <li>設 <strong>Parent 為對應功能需求的 Epic 單</strong></li>
+      </Steps>
+      <Callout type="info" style={{ marginTop: 8 }}>
+        Bug 單建立後，系統會自動建立 <strong>DEV-Task & QA-Task</strong> 各一張
+      </Callout>
+    </>
+  ),
+}
+
+const bugReopen = {
+  id: 'bug-reopen',
+  title: 'Bug ReOpen 處理',
+  roles: ['QA', 'RD'],
+  phases: ['deploy'],
+  contexts: ['qa-bug', 'rd-bug'],
+  content: (
+    <>
+      <p>RD 修復後 QA 驗證，發現問題仍存在：</p>
+      <Steps style={{ marginTop: 8 }}>
+        <li>建立新的 <strong>DEV-Task</strong> 繼續修復</li>
+        <li><code>Reopened Count</code> 欄位自動累加計數</li>
+      </Steps>
+    </>
   ),
 }
 
@@ -699,6 +744,8 @@ export const CARDS = [
   devTaskCarryover,
   sprintCoexist,
   qaVerify,
-  uatBug,
+  prepBug,
+  verifyFoundBug,
+  bugReopen,
   specChange,
 ]
