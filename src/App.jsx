@@ -41,6 +41,8 @@ function isVisible(card, active) {
   if (active.role.size > 0 && !card.roles.some(r => active.role.has(r))) return false
   if (active.phase.size > 0 && !card.phases.some(p => active.phase.has(p))) return false
   if (active.context.size > 0 && contexts !== null && !contexts.some(c => active.context.has(c))) return false
+  // 核心概念卡片在有 context filter 啟用時不跟著出現，除非明確選取 foundation phase
+  if (card.phases.includes('foundation') && active.context.size > 0 && !active.phase.has('foundation')) return false
   return true
 }
 

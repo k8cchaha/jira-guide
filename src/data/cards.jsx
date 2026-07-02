@@ -669,7 +669,7 @@ const verifyFoundBug = {
         <li>開一張 <strong>Bug 單</strong></li>
         <li>填寫完整 Description（Env / Pre-condition / Steps / Actual Result / Expected Result）</li>
         <li>設定 Label、Release Package、Components、Assignee、<strong>Defect Type</strong></li>
-        <li>設 <strong>Parent 為對應功能需求的 Epic 單</strong></li>
+        <li>若對應功能需求有 Epic，設 <strong>Parent 為該 Epic 單</strong></li>
       </Steps>
       <Callout type="info" style={{ marginTop: 8 }}>
         Bug 單建立後，系統會自動建立 <strong>DEV-Task & QA-Task</strong> 各一張
@@ -682,15 +682,45 @@ const bugReopen = {
   id: 'bug-reopen',
   title: 'Bug ReOpen 處理',
   roles: ['QA', 'RD'],
-  phases: ['deploy'],
+  phases: ['in-sprint'],
   contexts: ['qa-bug', 'rd-bug'],
   content: (
     <>
       <p>RD 修復後 QA 驗證，發現問題仍存在：</p>
       <Steps style={{ marginTop: 8 }}>
-        <li>建立新的 <strong>DEV-Task</strong> 繼續修復</li>
+        <li>自動建立新的 <strong>DEV-Task</strong> 繼續修復，同時建立對應的 <strong>QA-Task</strong> 作為後續驗證紀錄</li>
         <li><code>Reopened Count</code> 欄位自動累加計數</li>
       </Steps>
+    </>
+  ),
+}
+
+const helpFixBug = {
+  id: 'help-fix-bug',
+  title: '協助夥伴修復 Feature Bug',
+  roles: ['RD'],
+  phases: ['in-sprint'],
+  contexts: ['rd-bug'],
+  content: (
+    <>
+      <p>當 Feature Bug 由<strong>其他 RD 協助修復</strong>時，需明確區分「Bug 歸屬」與「執行歸屬」：</p>
+      <Tbl style={{ marginTop: 8 }}>
+        <tr><th>單據</th><th>Assignee</th><th>代表意義</th></tr>
+        <tr>
+          <td><strong>Bug 單（母單）</strong></td>
+          <td>原始開發者</td>
+          <td>此 Bug 由誰的開發造成</td>
+        </tr>
+        <tr>
+          <td><strong>DEV-Task（子單）</strong></td>
+          <td>協助修復者</td>
+          <td>實際執行修復的人</td>
+        </tr>
+      </Tbl>
+      <Callout type="warning" style={{ marginTop: 8 }}>
+        系統會分析每位 RD 的「功能開發點數 vs Bug 點數」比例作為開發品質指標。<br />
+        Bug 母單 Assignee 決定 Bug 歸屬於誰，若填錯會影響協助者的品質數據。
+      </Callout>
     </>
   ),
 }
@@ -744,8 +774,9 @@ export const CARDS = [
   devTaskCarryover,
   sprintCoexist,
   qaVerify,
-  prepBug,
   verifyFoundBug,
+  prepBug,
   bugReopen,
+  helpFixBug,
   specChange,
 ]
