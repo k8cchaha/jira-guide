@@ -62,25 +62,6 @@ export function FilterBar({ active, onToggle, onReset, visible, total }) {
             </div>
           </div>
 
-          <div className="divider" />
-
-          <div className="filter-group">
-            <span className="filter-label">任務情境</span>
-            <div className="chips">
-              {availableContexts.map(ctx => (
-                <button
-                  key={ctx.id}
-                  className={`chip${active.context.has(ctx.id) ? ' active' : ''}`}
-                  data-type="context"
-                  data-value={ctx.id}
-                  onClick={() => onToggle('context', ctx.id)}
-                >
-                  {ctx.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
           <span className="result-count">顯示 {visible} / {total} 項</span>
         </div>
       </div>

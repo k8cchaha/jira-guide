@@ -91,7 +91,7 @@ const pointsRules = {
         <tr><th></th><th>Estimated Effort</th><th>Story Points</th><th>Actual Story Points</th></tr>
         <tr><td><strong>時機</strong></td><td>SPEC 不清楚時</td><td>Sprint 啟動前</td><td>任務完成後立即填</td></tr>
         <tr><td><strong>適用</strong></td><td>Epic、Story</td><td>DEV-Task、QA-Task</td><td>DEV-Task、QA-Task</td></tr>
-        <tr><td><strong>目的</strong></td><td>早期決策依據</td><td>Sprint 評估範圍</td><td>紀錄實際花費</td></tr>
+        <tr><td><strong>目的</strong></td><td>早期決策依據</td><td>Sprint 評估範圍</td><td>紀錄實際花費點數</td></tr>
       </Tbl>
       <Callout type="danger" style={{ marginTop: 10 }}>
         Story Points & Actual Story Points <strong>僅限子單填入</strong>。<br />
@@ -141,14 +141,14 @@ const storyVsTask = {
 
 const childStatus = {
   id: 'child-status',
-  title: '子票狀態切換',
+  title: '子單狀態切換',
   roles: ['PM', 'RD', 'QA'],
   phases: ['foundation'],
   contexts: 'all',
   content: (
     <>
       <Callout type="info">
-        子票（DEV-Task / QA-Task）的狀態切換視有無 <strong>GitLab MR 連動</strong>而不同。
+        子單（DEV-Task / QA-Task）的狀態切換視有無 <strong>GitLab MR 連動</strong>而不同。
       </Callout>
       <Tbl>
         <tr>
@@ -177,14 +177,14 @@ const childStatus = {
 
 const parentStatus = {
   id: 'parent-status',
-  title: '母票狀態切換',
+  title: '母單狀態切換',
   roles: ['PM', 'RD', 'QA'],
   phases: ['foundation'],
   contexts: 'all',
   content: (
     <>
       <Callout type="info">
-        母票狀態由 Jira Automation 根據子票狀態自動推進，
+        母單狀態由 Jira Automation 根據子單狀態自動推進，
         僅在<strong>驗證環節</strong>需手動切換。
       </Callout>
 
@@ -194,12 +194,12 @@ const parentStatus = {
         <tr>
           <td><St type="open">Open</St> → <St type="prog">In Progress</St></td>
           <td>⚡ 自動</td>
-          <td>任一子票進入 In Progress</td>
+          <td>任一 <strong>DEV-Task</strong> 進入 In Progress</td>
         </tr>
         <tr>
           <td><St type="prog">In Progress</St> → <St type="devready">Dev Ready</St></td>
           <td>⚡ 自動</td>
-          <td>所有子票 Done</td>
+          <td>所有 <strong>DEV-Task</strong> Done</td>
         </tr>
         <tr>
           <td> → <St type="ready">QA / PREP / Prod Ready</St></td>
@@ -239,12 +239,12 @@ const parentStatus = {
         <tr>
           <td><St type="open">Open</St> → <St type="prog">In Progress</St></td>
           <td>⚡ 自動</td>
-          <td>任一子票進入 In Progress</td>
+          <td>任一 <strong>DEV-Task</strong> 進入 In Progress</td>
         </tr>
         <tr>
           <td><St type="prog">In Progress</St> → <St type="review">In Review</St></td>
           <td>⚡ 自動</td>
-          <td>所有子票 Done</td>
+          <td>所有 <strong>DEV-Task</strong> Done</td>
         </tr>
         <tr>
           <td><St type="review">In Review</St> → <St type="done">Done</St></td>
@@ -263,7 +263,7 @@ const dor = {
   title: '需求就緒',
   roles: ['PM', 'RD', 'QA'],
   phases: ['pre-sprint'],
-  contexts: 'all',
+  contexts: ['pm-planning'],
   content: (
     <>
       <p>進入 Sprint 前，需求單必須符合 DoR（Definition of Ready）：</p>
@@ -294,7 +294,7 @@ const estimatedEffort = {
         </li>
         <li>將粗估點數填入 Story 或 Epic 的 <code>Estimated Effort</code> 欄位</li>
       </Steps>
-      <Callout type="info">粗估目的是幫助排程與決策，<strong>不代表</strong>實際開發點數。</Callout>
+      <Callout type="warning">粗估目的是幫助排程與決策，<strong>不代表</strong>實際開發點數。</Callout>
     </>
   ),
 }
@@ -346,8 +346,14 @@ const splitSubtask = {
   contexts: ['rd-dev'],
   content: (
     <>
-      <Steps>
-        <li>母單下會建立 DEV-Task 與 QA-Task，若發現有缺少或想進行任務拆分請自行添加</li>
+      <Tbl>
+        <tr><th>母單類型</th><th>預設子單</th></tr>
+        <tr><td>Story</td><td>DEV-Task ＋ QA-Task x 2（預設建立）</td></tr>
+        <tr><td>Bug</td><td>DEV-Task ＋ QA-Task（預設建立）</td></tr>
+        <tr><td>Task</td><td>僅 DEV-Task（有需要再手動加 QA-Task）</td></tr>
+      </Tbl>
+      <Steps style={{ marginTop: 10 }}>
+        <li>母單建立後會自動產生對應的子單，若有缺少或需要進一步拆分任務，請自行手動新增</li>
         <li>單一子單點數不超過 <strong>10 點</strong>，若超過需拆分 (建議)</li>
         <li>所有子單完成估點（<code>Story Points</code>）
           <Bullets sub style={{ marginTop: 4 }}>
@@ -362,25 +368,35 @@ const splitSubtask = {
 
 const qaTaskRules = {
   id: 'qa-task-rules',
-  title: 'QA-Task 建立規則',
+  title: 'DEV-Task / QA-Task 建立規則',
   roles: ['RD', 'QA'],
   phases: ['pre-sprint'],
   contexts: ['rd-dev', 'qa-testing'],
   content: (
     <>
       <Tbl>
-        <tr><th>母單類型</th><th>預設子單</th></tr>
-        <tr><td>Story</td><td>DEV-Task ＋ QA-Task（預設建立）</td></tr>
-        <tr><td>Bug</td><td>DEV-Task ＋ QA-Task（預設建立）</td></tr>
-        <tr><td>Task</td><td>僅 DEV-Task（有需要再手動加 QA-Task）</td></tr>
+        <tr>
+          <th style={{ width: '50%' }}>DEV-Task</th>
+          <th style={{ width: '50%' }}>QA-Task（Story 分兩張）</th>
+        </tr>
+        <tr>
+          <td style={{ verticalAlign: 'top' }}>
+            <Bullets>
+              <li><code>Dev Type</code> 依母單類型自動填入：<code>Dev</code> / <code>OP-Dev</code> / <code>Bug</code> / <code>OP-Bug</code> / <code>Spike</code> / <code>Pre-Spike</code></li>
+              <li>Sprint 開始前填入 <strong>Story Points</strong></li>
+              <li>完成後填入 <strong>Actual Story Points</strong></li>
+            </Bullets>
+          </td>
+          <td style={{ verticalAlign: 'top' }}>
+            <Steps>
+              <li><strong>Test Case Creation</strong> RD 開發期間同步建立，填 Story Points & Due Date，完成後填 Actual SP</li>
+              <li><strong>Test Execution</strong> 轉 QA Ready 後開始執行，填 Story Points & Due Date，完成後填 Actual SP<br />
+                <span style={{ fontSize: 11, color: '#6B778C' }}>（點數基準：35 個 Test Case ≈ 1 人天）</span>
+              </li>
+            </Steps>
+          </td>
+        </tr>
       </Tbl>
-      <p style={{ marginTop: 10, fontSize: 12, color: '#42526E' }}><strong>Story 的 QA-Task 分兩張：</strong></p>
-      <Steps style={{ marginTop: 4 }}>
-        <li><strong>Test Case Creation</strong>：RD 開發期間同步建立，填 Story Points & Due Date，完成後填 Actual SP</li>
-        <li><strong>Test Execution</strong>：轉 QA Ready 後開始執行，填 Story Points & Due Date，完成後填 Actual SP<br />
-          <span style={{ fontSize: 11, color: '#6B778C' }}>（點數基準：35 個 Test Case ≈ 1 人天）</span>
-        </li>
-      </Steps>
     </>
   ),
 }
@@ -414,7 +430,8 @@ const gitMR = {
   id: 'git-mr',
   title: 'Git MR 自動化流程',
   roles: ['RD'],
-  phases: ['in-sprint'],
+  phases: ['in-sprint', 'deploy'],
+  section: 'in-sprint',
   contexts: ['rd-dev', 'rd-bug'],
   content: (
     <>
@@ -456,18 +473,24 @@ const actualSP = {
 
 const spike = {
   id: 'spike',
-  title: 'Spike 研究任務',
+  title: 'Spike 研究型任務',
   roles: ['RD', 'PM'],
   phases: ['pre-sprint', 'in-sprint'],
-  section: 'in-sprint',
   contexts: ['rd-spike', 'pm-planning'],
   content: (
-    <Bullets>
-      <li>Spike 工作使用 <strong>DEV-Task</strong> 記錄，<code>Dev Type</code> 由 Automation 自動填為 <code>Spike</code> 或 <code>Pre-Spike</code></li>
-      <li>建立時內容必須包含：<strong>預期的產出是什麼</strong></li>
-      <li>若屬於多次討論類型，可註明預期進行方式（場數、Milestone）</li>
-      <li>Spike 完成後填入 Actual Story Points</li>
-    </Bullets>
+    <Steps>
+      <li>
+        建立 <strong>Spike 母單（Task 單）</strong>，Summary 加上前綴 <code>[Spike]</code> 或 <code>[Pre-Spike]</code>
+        <Bullets sub style={{ marginTop: 4 }}>
+          <li>Automation 會自動建立 DEV-Task，並帶入對應的 <code>Dev Type</code></li>
+          <li>內容必須包含：<strong>預期的產出是什麼</strong></li>
+          <li>若屬於多次討論類型，可註明預期進行方式（場數、Milestone）</li>
+        </Bullets>
+      </li>
+      <li>完成指定研究產出後，將 <strong>DEV-Task</strong> 切換至 <St type="done">Done</St>，母單狀態自動切換至 <St type="review">In Review</St></li>
+      <li>在母單 Comment 中 Tag 負責 Review 產出的人</li>
+      <li>負責人 Review 確認無誤後，手動將母單切換至 <St type="done">Done</St></li>
+    </Steps>
   ),
 }
 
@@ -475,7 +498,7 @@ const bugCreate = {
   id: 'bug-create',
   title: 'Bug 開單規範',
   roles: ['QA'],
-  phases: ['in-sprint', 'deploy'],
+  phases: ['deploy'],
   section: 'in-sprint',
   contexts: ['qa-bug'],
   content: (
@@ -545,6 +568,27 @@ const bugSpecialCase = {
   ),
 }
 
+const sprintInsert = {
+  id: 'sprint-insert',
+  title: '插單（Sprint 中加入新需求）',
+  roles: ['PM', 'RD'],
+  phases: ['in-sprint'],
+  contexts: ['pm-sprint', 'rd-dev'],
+  content: (
+    <>
+      <Callout type="warning">
+        PM 有緊急需求或 Bug 需插入當前 Sprint 時，須先於 <strong>Slack 或 Daily</strong> 主動告知 RD 團隊。
+      </Callout>
+      <p style={{ marginTop: 8 }}>RD 團隊依以下順序處理：</p>
+      <Steps style={{ marginTop: 6 }}>
+        <li>內部討論，評估插單的 Resource 是否可行</li>
+        <li>若 Resource 不足，告知 PM 現況，討論是否將部分現有 Sprint 單延後</li>
+        <li>若無法騰出空間，向主管反映，協調開發資源、安排加班支援或與客戶溝通</li>
+      </Steps>
+    </>
+  ),
+}
+
 const abnormalClose = {
   id: 'abnormal-close',
   title: '異常結束處理（無效單）',
@@ -577,16 +621,16 @@ const devTaskCarryover = {
   contexts: 'all',
   content: (
     <>
-      <p>以<strong>母票（Story / Task / Bug）</strong>為基準，判斷跨 Sprint 的處理方式：</p>
+      <p>以<strong>母單（Story / Task / Bug）</strong>為基準，判斷跨 Sprint 的處理方式：</p>
       <Steps style={{ marginTop: 8 }}>
         <li>
-          <strong>完全未開始</strong>：直接將母票移至下個 Sprint
+          <strong>完全未開始</strong>：直接將母單移至下個 Sprint
           <Bullets sub style={{ marginTop: 4 }}>
-            <li>子單（DEV-Task / QA-Task）須與母票在<strong>同一個 Sprint</strong>，跟著一起移動</li>
+            <li>子單（DEV-Task / QA-Task）須與母單在<strong>同一個 Sprint</strong>，跟著一起移動</li>
           </Bullets>
         </li>
         <li>
-          <strong>已在進行中</strong>：母票留在當前 Sprint 繼續執行
+          <strong>已在進行中</strong>：母單留在當前 Sprint 繼續執行
           <Bullets sub style={{ marginTop: 4 }}>
             <li>Sprint <strong>不在到期時強制關閉</strong>，等到所有需求都 Done 才 Complete</li>
             <li>Scrum Board 上同時存在<strong>多個 Sprint 是正常現象</strong>，不是異常</li>
@@ -594,7 +638,7 @@ const devTaskCarryover = {
         </li>
       </Steps>
       <Callout type="warning" style={{ marginTop: 8 }}>
-        母票<strong>不存在部分完成</strong>。雖然一張母票下可以自由拆成多張 DEV-Task 進行任務切割，但母票本身需顧及功能完整性，只有「全部完成」或「尚未完成」兩種狀態。
+        母單<strong>不存在部分完成</strong>。雖然一張母單下可以自由拆成多張 DEV-Task 進行任務切割，但母單本身需顧及功能完整性，只有「全部完成」或「尚未完成」兩種狀態。
       </Callout>
     </>
   ),
@@ -604,8 +648,7 @@ const sprintCoexist = {
   id: 'sprint-coexist',
   title: 'Sprint 並存說明',
   roles: ['PM', 'RD', 'QA'],
-  phases: ['end-sprint', 'deploy'],
-  section: 'end-sprint',
+  phases: ['end-sprint'],
   contexts: 'all',
   content: (
     <Bullets>
@@ -642,21 +685,6 @@ const qaVerify = {
   ),
 }
 
-const prepBug = {
-  id: 'prep-bug',
-  title: 'PREP 客戶 Bug 處理',
-  roles: ['QA'],
-  phases: ['deploy'],
-  contexts: ['qa-bug'],
-  content: (
-    <Steps>
-      <li>在 Bug 單下建立一張 <strong>QA-Task for Reproduce</strong></li>
-      <li>先在 QA 環境確認是否能復現相同的 Bug</li>
-      <li>確認可重現後，RD 建立 DEV-Task 進行修復</li>
-    </Steps>
-  ),
-}
-
 const verifyFoundBug = {
   id: 'verify-found-bug',
   title: '驗證過程發現 Bug',
@@ -688,6 +716,7 @@ const bugReopen = {
     <>
       <p>RD 修復後 QA 驗證，發現問題仍存在：</p>
       <Steps style={{ marginTop: 8 }}>
+        <li>QA 將 Bug 單狀態切換至 <St type="prog">In Progress</St></li>
         <li>自動建立新的 <strong>DEV-Task</strong> 繼續修復，同時建立對應的 <strong>QA-Task</strong> 作為後續驗證紀錄</li>
         <li><code>Reopened Count</code> 欄位自動累加計數</li>
       </Steps>
@@ -770,12 +799,12 @@ export const CARDS = [
   bugCreate,
   bugFix,
   bugSpecialCase,
+  sprintInsert,
   abnormalClose,
   devTaskCarryover,
   sprintCoexist,
   qaVerify,
   verifyFoundBug,
-  prepBug,
   bugReopen,
   helpFixBug,
   specChange,

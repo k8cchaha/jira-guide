@@ -37,13 +37,14 @@ body {
   display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center;
 }
 .filter-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.filter-label { font-size: 11px; font-weight: 600; color: #6B778C; white-space: nowrap; min-width: 48px; }
+.filter-label { font-size: 11px; font-weight: 600; color: #6B778C; white-space: nowrap; min-width: 48px; line-height: 1; display: flex; align-items: center; }
 .chips { display: flex; gap: 6px; flex-wrap: wrap; }
 
 .chip {
   border: 1.5px solid #DFE1E6; background: white; color: #42526E;
   padding: 3px 12px; border-radius: 20px; cursor: pointer;
   font-size: 12px; font-family: inherit; transition: all 0.15s; white-space: nowrap;
+  display: inline-flex; align-items: center; line-height: 1;
 }
 .chip:hover { border-color: #0052CC; color: #0052CC; }
 .chip.active { color: white; }
