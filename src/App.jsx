@@ -53,7 +53,7 @@ function isFieldVisible(field, active) {
   if (active.required && !field.required) return false
   if (active.role.size > 0 && field.roles.length > 0 && !field.roles.some(r => active.role.has(r))) return false
   if (active.issueType.size > 0 && !field.issueTypeGroups.includes('all') && !field.issueTypeGroups.some(g => active.issueType.has(g))) return false
-  if (active.timing.size > 0 && field.timing.length > 0 && !field.timing.some(t => active.timing.has(t))) return false
+  if (active.timing.size > 0 && !field.timing.some(t => active.timing.has(t))) return false
   return true
 }
 

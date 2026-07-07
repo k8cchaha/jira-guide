@@ -462,7 +462,7 @@ const actualSP = {
       <Bullets>
         <li>每張 DEV-Task 完成後，<strong>立即填入</strong> <code>Actual Story Points</code></li>
         <li>有效單（Resolution: Done / Fixed）：如實填入，最小單位 0.1</li>
-        <li>無效單（Duplicate / Won't Do…）：可不填，但有花費時間建議記錄</li>
+        <li>無效單（Duplicate / Won't Do…）：可不填，但若有花費時間，建議記錄</li>
       </Bullets>
       <Callout type="danger" style={{ marginTop: 8 }}>
         母單的點數由 Automation 自動匯總，<strong>禁止手動修改母單的 Story Points / Actual Story Points</strong>。
@@ -499,7 +499,6 @@ const bugCreate = {
   title: 'Bug 開單規範',
   roles: ['QA'],
   phases: ['deploy'],
-  section: 'in-sprint',
   contexts: ['qa-bug'],
   content: (
     <>
@@ -514,12 +513,9 @@ const bugCreate = {
       <p style={{ marginTop: 10 }}><strong>其他必填欄位：</strong></p>
       <Bullets style={{ marginTop: 4 }}>
         <li><code>Defect Type</code>：Feature Bug（此次造成）/ Known Issue（舊問題）</li>
-        <li>Label、Release Package、Platform、Assignee</li>
+        <li>Label、Release Package、Components、Assignee</li>
         <li>Link 相關的 Story 或 Task</li>
       </Bullets>
-      <Callout type="warning" style={{ marginTop: 8 }}>
-        <strong>不要</strong>把 Bug 的 Parent 設為相關 Epic，會影響 Epic 完成度計算。
-      </Callout>
     </>
   ),
 }
@@ -563,7 +559,7 @@ const bugSpecialCase = {
       <tr><td>Bug 無法重現</td><td>Status → <code>Reproduce</code>，Assign 回 QA，comment Tag QA</td></tr>
       <tr><td>SPEC 遺漏</td><td>Status → <code>Request Info</code>，Assign 給 PM，comment Tag PM</td></tr>
       <tr><td>已在其他單中修復</td><td>Link → 選 <code>is fixed by</code>，填入修復的 Bug 單號</td></tr>
-      <tr><td>Bug 被 ReOpen</td><td>建立新的 DEV-Task 來進行修復</td></tr>
+      <tr><td>Bug 被 ReOpen</td><td>使用新的 DEV-Task 來進行修復</td></tr>
     </Tbl>
   ),
 }
@@ -582,8 +578,8 @@ const sprintInsert = {
       <p style={{ marginTop: 8 }}>RD 團隊依以下順序處理：</p>
       <Steps style={{ marginTop: 6 }}>
         <li>內部討論，評估插單的 Resource 是否可行</li>
-        <li>若 Resource 不足，告知 PM 現況，討論是否將部分現有 Sprint 單延後</li>
-        <li>若無法騰出空間，向主管反映，協調開發資源、安排加班支援或與客戶溝通</li>
+        <li>若 Resource 不足，告知 PM 現況，討論是否將部分現有 Sprint 單移出到下個 Sprint</li>
+        <li>若無法進行調整，向主管反映，協調開發資源、安排加班支援或與客戶溝通</li>
       </Steps>
     </>
   ),
@@ -593,8 +589,7 @@ const abnormalClose = {
   id: 'abnormal-close',
   title: '異常結束處理（無效單）',
   roles: ['PM', 'RD', 'QA'],
-  phases: ['in-sprint', 'end-sprint', 'deploy'],
-  section: 'in-sprint',
+  phases: ['in-sprint'],
   contexts: 'all',
   content: (
     <>
@@ -640,6 +635,43 @@ const devTaskCarryover = {
       <Callout type="warning" style={{ marginTop: 8 }}>
         母單<strong>不存在部分完成</strong>。雖然一張母單下可以自由拆成多張 DEV-Task 進行任務切割，但母單本身需顧及功能完整性，只有「全部完成」或「尚未完成」兩種狀態。
       </Callout>
+    </>
+  ),
+}
+
+const requiredFieldsCheck = {
+  id: 'required-fields-check',
+  title: '必填欄位檢核',
+  roles: ['PM', 'RD', 'QA'],
+  phases: ['end-sprint'],
+  contexts: 'all',
+  content: (
+    <>
+      <p>將不合規的單列出，請同學儘速補齊必要資訊：</p>
+      <Tbl style={{ marginTop: 8 }}>
+        <thead>
+          <tr><th>類型</th><th>必填欄位</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>DEV-Task / QA-Task</td>
+            <td>
+              <Bullets>
+                <li>Story Points</li>
+                <li>Actual Story Points</li>
+              </Bullets>
+            </td>
+          </tr>
+          <tr>
+            <td>Bug</td>
+            <td>
+              <Bullets>
+                <li>Defect Cause</li>
+              </Bullets>
+            </td>
+          </tr>
+        </tbody>
+      </Tbl>
     </>
   ),
 }
@@ -697,6 +729,7 @@ const verifyFoundBug = {
         <li>開一張 <strong>Bug 單</strong></li>
         <li>填寫完整 Description（Env / Pre-condition / Steps / Actual Result / Expected Result）</li>
         <li>設定 Label、Release Package、Components、Assignee、<strong>Defect Type</strong></li>
+        <li>若問題未涵蓋於 Spec 或 A/C，視情況優先將 Bug 單 Assign 給 PM 補充定義</li>
         <li>若對應功能需求有 Epic，設 <strong>Parent 為該 Epic 單</strong></li>
       </Steps>
       <Callout type="info" style={{ marginTop: 8 }}>
@@ -710,7 +743,7 @@ const bugReopen = {
   id: 'bug-reopen',
   title: 'Bug ReOpen 處理',
   roles: ['QA', 'RD'],
-  phases: ['in-sprint'],
+  phases: ['in-sprint', 'deploy'],
   contexts: ['qa-bug', 'rd-bug'],
   content: (
     <>
@@ -758,7 +791,7 @@ const specChange = {
   id: 'spec-change',
   title: 'SPEC Change 處理',
   roles: ['RD', 'PM'],
-  phases: ['in-sprint', 'deploy'],
+  phases: ['deploy'],
   section: 'deploy',
   contexts: ['rd-dev', 'pm-sprint'],
   content: (
@@ -803,6 +836,7 @@ export const CARDS = [
   abnormalClose,
   devTaskCarryover,
   sprintCoexist,
+  requiredFieldsCheck,
   qaVerify,
   verifyFoundBug,
   bugReopen,
