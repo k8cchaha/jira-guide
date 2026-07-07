@@ -44,6 +44,20 @@ export function FeedbackDialog({ open, onClose }) {
   }, [open])
 
   useEffect(() => {
+    if (!open) return
+    const scrollY = window.scrollY
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.width = '100%'
+    return () => {
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      window.scrollTo(0, scrollY)
+    }
+  }, [open])
+
+  useEffect(() => {
     if (!open || tab !== 'faq') return
     if (APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
       setFaqError(true)
