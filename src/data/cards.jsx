@@ -256,6 +256,39 @@ const parentStatus = {
   ),
 }
 
+const securityLevel = {
+  id: 'security-level',
+  title: '權限控管',
+  roles: ['PM'],
+  phases: ['foundation'],
+  contexts: 'all',
+  content: (
+    <>
+      <p>專案使用 <strong>Security Level</strong> 控管單據的存取範圍：</p>
+      <Tbl style={{ marginTop: 8 }}>
+        <thead>
+          <tr><th>Security Level</th><th>可存取對象</th><th>預設適用</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Internal</strong></td>
+            <td>開發成員</td>
+            <td>Epic · Story · Task · DEV-Task · QA-Task</td>
+          </tr>
+          <tr>
+            <td><strong>External</strong></td>
+            <td>開發成員 & 日方客戶（可對外）</td>
+            <td>Bug</td>
+          </tr>
+        </tbody>
+      </Tbl>
+      <Callout type="info" style={{ marginTop: 8 }}>
+        當單據加上 Label <code>OPmust</code>，Automation 會自動將 Security Level 調整為 <strong>External</strong>。目前主要由 OPM 使用。
+      </Callout>
+    </>
+  ),
+}
+
 // ─────────────────────────── Sprint 規劃前 ───────────────────────────
 
 const dor = {
@@ -474,7 +507,7 @@ const actualSP = {
 const spike = {
   id: 'spike',
   title: 'Spike 研究型任務',
-  roles: ['RD', 'PM'],
+  roles: ['RD', 'PM', 'QA'],
   phases: ['pre-sprint', 'in-sprint'],
   contexts: ['rd-spike', 'pm-planning'],
   content: (
@@ -819,6 +852,7 @@ export const CARDS = [
   storyVsTask,
   childStatus,
   parentStatus,
+  securityLevel,
   dor,
   estimatedEffort,
   sprintPlanning,
