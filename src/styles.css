@@ -61,11 +61,12 @@ body {
 .divider { width: 1px; height: 22px; background: #DFE1E6; flex-shrink: 0; }
 
 .reset-btn {
-  font-size: 11px; color: white; background: rgba(255,255,255,0.2);
-  border: 1px solid rgba(255,255,255,0.5);
-  cursor: pointer; padding: 3px 10px; border-radius: 4px; font-family: inherit;
+  font-size: 12px; color: white; background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  cursor: pointer; padding: 4px 10px; border-radius: 20px; font-family: inherit;
+  display: flex; align-items: center; gap: 5px; font-weight: 600;
 }
-.reset-btn:hover { background: rgba(255,255,255,0.35); }
+.reset-btn:hover { background: rgba(255,255,255,0.18); }
 
 .result-count { font-size: 11px; color: #97A0AF; margin-left: auto; }
 
@@ -344,14 +345,16 @@ code {
 .header-right { display: flex; gap: 8px; align-items: center; }
 
 .feedback-btn {
-  background: none; border: none; cursor: pointer;
-  color: #FFE066;
-  padding: 4px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  transition: filter 0.2s;
-  filter: drop-shadow(0 0 3px rgba(255,220,50,0.5));
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25);
+  cursor: pointer; color: #FFE066;
+  padding: 4px 10px 4px 7px; border-radius: 20px;
+  display: flex; align-items: center; gap: 5px;
+  font-family: inherit; font-size: 12px; font-weight: 600;
+  transition: filter 0.2s, background 0.2s;
+  filter: drop-shadow(0 0 3px rgba(255,220,50,0.4));
 }
 .feedback-btn:hover {
+  background: rgba(255,255,255,0.18);
   filter: drop-shadow(0 0 7px rgba(255,220,50,0.95));
 }
 .feedback-btn .bulb-rays {
