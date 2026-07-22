@@ -107,7 +107,12 @@ body {
   padding: 11px 14px 9px; border-bottom: 1px solid #F4F5F7;
   display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
 }
-.card-title { font-size: 13px; font-weight: 600; color: #172B4D; line-height: 1.4; }
+.card-title { font-size: 13px; font-weight: 600; color: #172B4D; line-height: 1.4; display: flex; align-items: center; gap: 5px; }
+.card-img-btn { background: none; border: none; padding: 2px; cursor: pointer; color: #6B778C; border-radius: 3px; display: flex; align-items: center; flex-shrink: 0; }
+.card-img-btn:hover { color: #0052CC; background: #F0F4FF; }
+.card-img-dialog { max-width: 800px; width: 90vw; }
+.card-img-dialog-body { display: flex; flex-direction: column; gap: 12px; }
+.card-img-preview { display: block; max-width: 100%; border-radius: 4px; }
 .card-tags { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; flex-shrink: 0; }
 
 .tag {
@@ -354,7 +359,6 @@ code {
   filter: drop-shadow(0 0 3px rgba(255,220,50,0.4));
 }
 .feedback-btn:hover {
-  background: rgba(255,255,255,0.18);
   filter: drop-shadow(0 0 7px rgba(255,220,50,0.95));
 }
 .feedback-btn .bulb-rays {

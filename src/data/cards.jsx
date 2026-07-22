@@ -29,6 +29,7 @@ const projectInfo = {
   roles: ['PM', 'RD', 'QA'],
   phases: ['foundation'],
   contexts: 'all',
+  images: ['/card-images/pic-1.jpg'],
   content: (
     <>
       <Tbl>
@@ -290,6 +291,42 @@ const securityLevel = {
 }
 
 // ─────────────────────────── Sprint 規劃前 ───────────────────────────
+
+const ticketCreation = {
+  id: 'ticket-creation',
+  title: '需求開單規範',
+  roles: ['PM'],
+  phases: ['pre-sprint'],
+  contexts: ['pm-planning'],
+  content: (
+    <>
+      <p style={{ fontWeight: 600, color: '#172B4D' }}>全自動一鍵建立</p>
+      <Steps style={{ marginTop: 4 }}>
+        <li>建立 Epic 後填入 <strong>Components</strong>，點擊 ⚡ <strong>Create All Dev Story</strong></li>
+        <li>系統依 Epic 所選的 Components，自動建立對應的 Story 或 Task，及所有 subtasks</li>
+      </Steps>
+      <p style={{ fontWeight: 600, color: '#172B4D', marginTop: 12 }}>精準控制開單類型</p>
+      <Steps style={{ marginTop: 4 }}>
+        <li>建立 Epic 後填入 <strong>Components</strong>，點擊其中一個 Custom 按鈕：
+          <Bullets sub style={{ marginTop: 4 }}>
+            <li>⚡ <strong>Custom Dev Story by Component</strong>：建立指定 Component 的 Story 單</li>
+            <li>⚡ <strong>Custom Dev Task by Component</strong>：建立指定 Component 的 Task 單</li>
+            <li>⚡ <strong>Custom Pre-spike Task by Component</strong>：建立指定 Component 的 Pre-spike Task 單</li>
+            <li>⚡ <strong>Custom Spike Task by Component</strong>：建立指定 Component 的 Spike Task 單</li>
+          </Bullets>
+        </li>
+        <li>彈出介面中勾選要建立的 Components（超出 Epic 範圍的會被忽略）</li>
+        <li>確認後系統自動建立對應的單與 subtasks</li>
+      </Steps>
+      <Callout type="danger">
+        每張需求單都必須提供完整的 <strong>SPEC</strong> 與 <strong>A/C（驗收條件）</strong>，這是後續開發與驗證的基準。
+      </Callout>
+      <Callout type="warning" style={{ marginTop: 8 }}>
+        建議透過 Jira Automation 建立對應子單，確保關鍵資訊自動填入，減少人工漏填風險。
+      </Callout>
+    </>
+  ),
+}
 
 const dor = {
   id: 'dor',
@@ -653,15 +690,11 @@ const devTaskCarryover = {
       <Steps style={{ marginTop: 8 }}>
         <li>
           <strong>完全未開始</strong>：直接將母單移至下個 Sprint
-          <Bullets sub style={{ marginTop: 4 }}>
-            <li>子單（DEV-Task / QA-Task）須與母單在<strong>同一個 Sprint</strong>，跟著一起移動</li>
-          </Bullets>
         </li>
         <li>
           <strong>已在進行中</strong>：母單留在當前 Sprint 繼續執行
           <Bullets sub style={{ marginTop: 4 }}>
-            <li>Sprint <strong>不在到期時強制關閉</strong>，等到所有需求都 Done 才 Complete</li>
-            <li>Scrum Board 上同時存在<strong>多個 Sprint 是正常現象</strong>，不是異常</li>
+            <li>將當前的 Dev-Task 所花費的<strong>點數與進度紀錄</strong>並結束這張單，開新的 Dev-Task，提供給下個 Sprint 使用</li>
           </Bullets>
         </li>
       </Steps>
@@ -853,6 +886,8 @@ export const CARDS = [
   childStatus,
   parentStatus,
   securityLevel,
+  ticketCreation,
+  spike,
   dor,
   estimatedEffort,
   sprintPlanning,
@@ -862,7 +897,6 @@ export const CARDS = [
   startDev,
   gitMR,
   actualSP,
-  spike,
   bugCreate,
   bugFix,
   bugSpecialCase,
