@@ -550,16 +550,17 @@ const spike = {
   content: (
     <Steps>
       <li>
-        建立 <strong>Spike 母單（Task 單）</strong>，Summary 加上前綴 <code>[Spike]</code> 或 <code>[Pre-Spike]</code>
+        建立 <strong>Spike 母單（Task 單）</strong>
         <Bullets sub style={{ marginTop: 4 }}>
-          <li>Automation 會自動建立 DEV-Task，並帶入對應的 <code>Dev Type</code></li>
+          <li>若有 Epic 單：點擊 ⚡ <strong>Custom Pre-spike/Spike Task by Component</strong>，Automation 會自動建立 DEV-Task，並帶入對應的 <code>Dev Type</code></li>
+          <li>若無 Epic 單：手動建立 Task 單，Summary 加上前綴 <code>[Spike]</code> 或 <code>[Pre-Spike]</code></li>
           <li>內容必須包含：<strong>預期的產出是什麼</strong></li>
           <li>若屬於多次討論類型，可註明預期進行方式（場數、Milestone）</li>
         </Bullets>
       </li>
       <li>完成指定研究產出後，將 <strong>DEV-Task</strong> 切換至 <St type="done">Done</St>，母單狀態自動切換至 <St type="review">In Review</St></li>
       <li>在母單 Comment 中 Tag 負責 Review 產出的人</li>
-      <li>負責人 Review 確認無誤後，手動將母單切換至 <St type="done">Done</St></li>
+      <li>負責人 Review 確認無誤後，<strong>手動</strong>將母單切換至 <St type="done">Done</St></li>
     </Steps>
   ),
 }
