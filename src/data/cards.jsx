@@ -95,9 +95,12 @@ const pointsRules = {
         <tr><td><strong>目的</strong></td><td>早期決策依據</td><td>Sprint 評估範圍</td><td>紀錄實際花費點數</td></tr>
       </Tbl>
       <Callout type="danger" style={{ marginTop: 10 }}>
-        Story Points & Actual Story Points <strong>僅限子單填入</strong>。<br />
+        Story Points & Actual Story Points <strong>僅限子單填寫，階層是在 subtask 這一層。</strong>。<br />
         最小單位 <strong>0.1</strong>（極小任務也請勿留空，避免系統誤判為未填）。<br />
         母單點數由 Automation 自動匯總，禁止手動修改。
+      </Callout>
+      <Callout type="info" style={{ marginTop: 8 }}>
+        Actual Story Points 可利用 EP Tool 在 MR description 中填入，來自動回填，避免人工漏填。
       </Callout>
     </>
   ),
@@ -401,7 +404,7 @@ const specConfirm = {
       <li>有不清楚的部分：
         <Bullets sub>
           <li>留言到單上 Comment，Tag PM / QA</li>
-          <li>或切換狀態到 <code>Request Info</code>，Assign to PM / 接球的同學</li>
+          <li>切換狀態到 <code>Request Info</code>，Assign to PM / 接球的同學</li>
         </Bullets>
       </li>
     </Bullets>
