@@ -287,7 +287,7 @@ const securityLevel = {
         </tbody>
       </Tbl>
       <Callout type="info" style={{ marginTop: 8 }}>
-        當單據加上 Label <code>OPmust</code>，Automation 會自動將 Security Level 調整為 <strong>External</strong>。目前主要由 OPM 使用。
+        當單據加上 Label <code>OPmust</code> 或 <code>FeatureMust</code>，Automation 會自動將 Security Level 調整為 <strong>External</strong>。目前主要由 OPM 使用。
       </Callout>
     </>
   ),
@@ -455,7 +455,7 @@ const qaTaskRules = {
         <tr>
           <td style={{ verticalAlign: 'top' }}>
             <Bullets>
-              <li><code>Dev Type</code> 依母單類型自動填入：<code>Dev</code> / <code>OP-Dev</code> / <code>Bug</code> / <code>OP-Bug</code> / <code>Spike</code> / <code>Pre-Spike</code></li>
+              <li><code>Dev Type</code> 依母單類型自動填入：<code>Dev</code> / <code>OP-Task</code> / <code>Bug</code> / <code>OP-Bug</code> / <code>Spike</code> / <code>Pre-Spike</code></li>
               <li>Sprint 開始前填入 <strong>Story Points</strong></li>
               <li>完成後填入 <strong>Actual Story Points</strong></li>
             </Bullets>
