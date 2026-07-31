@@ -287,7 +287,7 @@ const securityLevel = {
         </tbody>
       </Tbl>
       <Callout type="info" style={{ marginTop: 8 }}>
-        當單據加上 Label <code>OPmust</code> 或 <code>FeatureMust</code>，Automation 會自動將 Security Level 調整為 <strong>External</strong>。目前主要由 OPM 使用。
+        當單據加上 Label <code>OPmust</code> 或 <code>FeatureMust</code>，Automation 會自動將 Security Level 調整為 <strong>External</strong>，即可讓外部成員存取。目前主要由 OPM 使用。
       </Callout>
     </>
   ),
