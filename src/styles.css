@@ -615,6 +615,23 @@ code {
 .kw-tag[data-kw="快速建單"]   { background: #E3FCEF; color: #006644; }
 .kw-tag[data-kw="特殊標記"]   { background: #EAE6FF; color: #403294; }
 
+.auto-row { cursor: pointer; }
+.auto-row:hover td { background: #EAF2FF; }
+
+/* Automation detail dialog */
+.auto-detail-dialog { max-width: 520px; }
+.auto-detail-body { display: flex; flex-direction: column; gap: 16px; }
+.auto-detail-purpose { font-size: 14px; color: #172B4D; line-height: 1.6; margin: 0; }
+.auto-detail-section { display: flex; flex-direction: column; gap: 6px; }
+.auto-detail-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; color: #5E6C84;
+}
+.auto-detail-text {
+  font-size: 13px; color: #172B4D; line-height: 1.6;
+  white-space: pre-line; margin: 0;
+}
+
 @media (max-width: 720px) {
   .automation-table-wrap { padding: 0 12px 40px; }
   .automation-table { table-layout: auto; }
