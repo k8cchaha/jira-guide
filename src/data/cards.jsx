@@ -568,6 +568,28 @@ const spike = {
   ),
 }
 
+const crossTeamTracking = {
+  id: 'cross-team-tracking',
+  title: '跨團隊工作追蹤（SRE / EP）',
+  roles: ['PM', 'RD', 'QA'],
+  phases: ['pre-sprint', 'in-sprint'],
+  contexts: ['pm-planning', 'pm-sprint', 'rd-dev', 'qa-testing'],
+  content: (
+    <>
+      <p>SRE、EP 等專案外團隊有獨立的工作目標，當專案需要其支援時，可透過以下流程建立自動連動的追蹤機制：</p>
+      <Steps style={{ marginTop: 8 }}>
+        <li>PM 在 Epic 的 <strong>Components</strong> 中勾選 <code>SRE</code> / <code>EP</code></li>
+        <li>點擊 Automation 建立對應的 <strong>Story 或 Task</strong>（依是否需跨環境驗證決定）</li>
+        <li>Automation 分別在 SRE / EP Project 建立各自工單，並透過 <strong>Status Link</strong> 與專案的 DEV-Task 建立連動</li>
+        <li>SRE / EP 工單狀態異動 → 專案 DEV-Task 自動同步 → 需求單狀態跟著推進</li>
+      </Steps>
+      <Callout type="info" style={{ marginTop: 8 }}>
+        PM / QA 只需追蹤<strong>專案需求單</strong>的狀態，即可即時掌握跨團隊工作進度，無需另外跟催。
+      </Callout>
+    </>
+  ),
+}
+
 const bugCreate = {
   id: 'bug-create',
   title: 'Bug 開單規範',
@@ -891,6 +913,7 @@ export const CARDS = [
   parentStatus,
   securityLevel,
   ticketCreation,
+  crossTeamTracking,
   spike,
   dor,
   estimatedEffort,
