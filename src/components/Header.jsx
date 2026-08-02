@@ -23,7 +23,10 @@ export function Header({ mode, onModeChange, onReset }) {
               onClick={() => onModeChange('fields')}
             >Fields</span>
             {' × '}
-            <span className="subtitle-automation">Automation</span>
+            <span
+              className={`subtitle-tab subtitle-automation${mode === 'automation' ? ' active' : ''}`}
+              onClick={() => onModeChange('automation')}
+            >Automation</span>
           </div>
         </div>
         <div className="header-right">

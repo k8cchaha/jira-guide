@@ -260,6 +260,7 @@ code {
   text-decoration-thickness: 1.5px;
 }
 .subtitle-automation { color: rgba(255,255,255,0.5); font-weight: 700; }
+.subtitle-automation.active { color: white; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1.5px; }
 
 /* FIELDS FILTER — chip active colors */
 .chip.active[data-value="epic-story-task"] { background: #36B37E; border-color: #36B37E; }
@@ -548,4 +549,77 @@ code {
     display: flex; flex-direction: column; gap: 6px;
   }
   .meta-combined .it-chips { flex-direction: column; }
+}
+
+/* ─── AUTOMATION TABLE ─── */
+/* Filter chip active colors */
+.chip.active[data-value="狀態切換"]   { background: #0052CC; border-color: #0052CC; }
+.chip.active[data-value="點數規則"]   { background: #FF8B00; border-color: #FF8B00; }
+.chip.active[data-value="自動更新值"] { background: #00B8D9; border-color: #00B8D9; }
+.chip.active[data-value="快速建單"]   { background: #00875A; border-color: #00875A; }
+.chip.active[data-value="特殊標記"]   { background: #6554C0; border-color: #6554C0; }
+
+.automation-table-wrap {
+  grid-column: 1 / -1;
+  overflow-x: auto;
+  padding: 0 24px 40px;
+}
+.automation-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: fixed;
+}
+.automation-table thead tr { background: #F4F5F7; }
+.automation-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  color: #5E6C84;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 2px solid #DFE1E6;
+}
+.automation-table td {
+  padding: 10px 12px;
+  vertical-align: top;
+  border-bottom: 1px solid #DFE1E6;
+  color: #172B4D;
+  line-height: 1.55;
+}
+.automation-table tbody tr:last-child td { border-bottom: none; }
+.automation-table tbody tr:nth-child(even) td { background: #FAFBFC; }
+.automation-table tbody tr:hover td { background: #EAF2FF; }
+
+.col-purpose { width: 30%; }
+.col-trigger { width: 25%; }
+.col-action  { width: 32%; }
+.col-kw      { width: 13%; }
+
+.auto-text { white-space: pre-line; }
+
+/* Keyword tags in table */
+.kw-tags { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+.kw-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.kw-tag[data-kw="狀態切換"]   { background: #DEEBFF; color: #0052CC; }
+.kw-tag[data-kw="點數規則"]   { background: #FFFAE6; color: #974F0C; }
+.kw-tag[data-kw="自動更新值"] { background: #E6FCFF; color: #006587; }
+.kw-tag[data-kw="快速建單"]   { background: #E3FCEF; color: #006644; }
+.kw-tag[data-kw="特殊標記"]   { background: #EAE6FF; color: #403294; }
+
+@media (max-width: 720px) {
+  .automation-table-wrap { padding: 0 12px 40px; }
+  .automation-table { table-layout: auto; }
+  .col-trigger { display: none; }
+  .col-action  { display: none; }
+  .col-purpose { width: auto; }
+  .col-kw      { width: 90px; }
 }

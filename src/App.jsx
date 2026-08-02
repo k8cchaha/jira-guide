@@ -4,13 +4,17 @@ import { FilterBar } from './components/FilterBar'
 import { Card } from './components/Card'
 import { FieldsFilterBar } from './components/FieldsFilterBar'
 import { FieldsTable } from './components/FieldsTable'
+import { AutomationFilterBar } from './components/AutomationFilterBar'
+import { AutomationTable } from './components/AutomationTable'
 import { PHASES, ROLE_CONTEXTS } from './data/filters'
 import { CARDS } from './data/cards'
 import { FIELDS } from './data/fields'
+import { AUTOMATIONS } from './data/automations'
 
 const ALL_PHASE_IDS = PHASES.map(p => p.id)
 const EMPTY = { role: new Set(), phase: new Set(), context: new Set() }
 const FIELDS_EMPTY = { role: new Set(), issueType: new Set(), timing: new Set(), required: false }
+const AUTO_EMPTY = new Set()
 const LS_KEY = 'jira-guide-filters'
 
 function loadFromStorage() {
@@ -61,6 +65,7 @@ export default function App() {
   const [mode, setMode] = useState('workflow')
   const [active, setActive] = useState(loadFromStorage)
   const [fieldsActive, setFieldsActive] = useState(FIELDS_EMPTY)
+  const [autoActive, setAutoActive] = useState(AUTO_EMPTY)
 
   useEffect(() => { saveToStorage(active) }, [active])
 
@@ -118,11 +123,22 @@ export default function App() {
     })
   }
 
+  function toggleAutoFilter(kw) {
+    setAutoActive(prev => {
+      const next = new Set(prev)
+      if (next.has(kw)) next.delete(kw)
+      else next.add(kw)
+      return next
+    })
+  }
+
   function resetFilters() {
     if (mode === 'workflow') {
       setActive({ role: new Set(), phase: new Set(), context: new Set() })
-    } else {
+    } else if (mode === 'fields') {
       setFieldsActive(FIELDS_EMPTY)
+    } else {
+      setAutoActive(AUTO_EMPTY)
     }
   }
 
@@ -152,6 +168,13 @@ export default function App() {
     [fieldsActive]
   )
 
+  const filteredAutomations = useMemo(
+    () => autoActive.size === 0
+      ? AUTOMATIONS
+      : AUTOMATIONS.filter(a => a.keywords.some(kw => autoActive.has(kw))),
+    [autoActive]
+  )
+
   return (
     <>
       <div className="sticky-top">
@@ -173,10 +196,19 @@ export default function App() {
             total={FIELDS.length}
           />
         )}
+        {mode === 'automation' && (
+          <AutomationFilterBar
+            active={autoActive}
+            onToggle={toggleAutoFilter}
+            visible={filteredAutomations.length}
+            total={AUTOMATIONS.length}
+          />
+        )}
       </div>
 
       <main className="content">
         {mode === 'fields' && <FieldsTable fields={filteredFields} />}
+        {mode === 'automation' && <AutomationTable automations={filteredAutomations} />}
         {mode === 'workflow' && sections.map(({ phase, cards, relevantCards, on }) => {
           if (cards.length === 0) return null
           // Hide label entirely when no cards are relevant (e.g. role filter removes all)
