@@ -112,6 +112,7 @@ const storyVsTask = {
   roles: ['PM', 'RD', 'QA'],
   phases: ['foundation'],
   contexts: 'all',
+  images: ['/card-images/pic-3.png'],
   content: (
     <>
       <Tbl>
@@ -438,6 +439,7 @@ const splitEstimate = {
   roles: ['RD', 'QA'],
   phases: ['pre-sprint'],
   contexts: ['rd-dev'],
+  images: ['/card-images/pic-2.png'],
   content: (
     <>
       <Steps>
