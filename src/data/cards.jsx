@@ -411,12 +411,12 @@ const specConfirm = {
   ),
 }
 
-const splitSubtask = {
-  id: 'split-subtask',
-  title: '拆子單 & 估點',
-  roles: ['RD', 'QA'],
+const autoSubtaskRules = {
+  id: 'auto-subtask-rules',
+  title: '自動建單規則',
+  roles: ['PM', 'RD', 'QA'],
   phases: ['pre-sprint'],
-  contexts: ['rd-dev'],
+  contexts: ['pm-planning', 'rd-dev'],
   content: (
     <>
       <Tbl>
@@ -425,9 +425,29 @@ const splitSubtask = {
         <tr><td>Bug</td><td>DEV-Task ＋ QA-Task（預設建立）</td></tr>
         <tr><td>Task</td><td>僅 DEV-Task（有需要再手動加 QA-Task）</td></tr>
       </Tbl>
-      <Steps style={{ marginTop: 10 }}>
-        <li>母單建立後會自動產生對應的子單，若有缺少或需要進一步拆分任務，請自行手動新增</li>
-        <li>單一子單點數不超過 <strong>10 點</strong>，若超過需拆分 (建議)</li>
+      <Callout type="info" style={{ marginTop: 10 }}>
+        母單建立後 Automation 會自動產生對應子單。若有缺少或需要進一步拆分，請手動新增。
+      </Callout>
+    </>
+  ),
+}
+
+const splitEstimate = {
+  id: 'split-estimate',
+  title: '拆單 & 估點',
+  roles: ['RD', 'QA'],
+  phases: ['pre-sprint'],
+  contexts: ['rd-dev'],
+  content: (
+    <>
+      <Steps>
+        <li>以<strong>需求單（Story / Task）</strong>為單位評估點數大小</li>
+        <li>若預估超過一個 Sprint 可完成的量 → 需進行拆分
+          <Bullets sub style={{ marginTop: 4 }}>
+            <li>建立數張 <strong>Task 票</strong>，將大需求切分為不同階段分批完成</li>
+            <li>原需求單保留，縮減點數後放入後續 Sprint</li>
+          </Bullets>
+        </li>
         <li>所有子單完成估點（<code>Story Points</code>）
           <Bullets sub style={{ marginTop: 4 }}>
             <li>建議採用團隊估點，幫助對齊目標</li>
@@ -435,7 +455,7 @@ const splitSubtask = {
           </Bullets>
         </li>
       </Steps>
-    </>
+</>
   ),
 }
 
@@ -919,7 +939,8 @@ export const CARDS = [
   estimatedEffort,
   sprintPlanning,
   specConfirm,
-  splitSubtask,
+  autoSubtaskRules,
+  splitEstimate,
   qaTaskRules,
   startDev,
   gitMR,
