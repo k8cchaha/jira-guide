@@ -640,3 +640,7 @@ code {
   .col-purpose { width: auto; }
   .col-kw      { width: 90px; }
 }
+
+@media (max-width: 430px) {
+  .btn-label { display: none; }
+}

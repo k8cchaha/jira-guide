@@ -42,14 +42,14 @@ export function Header({ mode, onModeChange, onReset }) {
                 <line x1="1" y1="9" x2="4.5" y2="9" />
               </g>
             </svg>
-            小幫手
+            <span className="btn-label">小幫手</span>
           </button>
           <button className="reset-btn" onClick={onReset}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
               <path d="M3 3v5h5" />
             </svg>
-            清除篩選
+            <span className="btn-label">清除篩選</span>
           </button>
         </div>
       </div>
