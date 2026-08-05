@@ -98,7 +98,7 @@ const pointsRules = {
       <Callout type="danger" style={{ marginTop: 10 }}>
         Story Points & Actual Story Points <strong>僅限子單填寫，階層是在 subtask 這一層。</strong>。<br />
         最小單位 <strong>0.1</strong>（極小任務也請勿留空，避免系統誤判為未填）。<br />
-        母單點數由 Automation 自動匯總，禁止手動修改。
+        母單點數由 Automation 自動匯總，禁止(無法)手動修改。
       </Callout>
       <Callout type="info" style={{ marginTop: 8 }}>
         Actual Story Points 可利用 EP Tool 在 MR description 中填入，來自動回填，避免人工漏填。
@@ -563,7 +563,7 @@ const actualSP = {
         <li>無效單（Duplicate / Won't Do…）：可不填，但若有花費時間，建議記錄</li>
       </Bullets>
       <Callout type="danger" style={{ marginTop: 8 }}>
-        母單的點數由 Automation 自動匯總，<strong>禁止手動修改母單的 Story Points / Actual Story Points</strong>。
+        母單的點數由 Automation 自動匯總，<strong>禁止(無法)手動修改母單的 Story Points / Actual Story Points</strong>。
       </Callout>
     </>
   ),
@@ -575,6 +575,7 @@ const spike = {
   roles: ['RD', 'PM', 'QA'],
   phases: ['pre-sprint', 'in-sprint'],
   contexts: ['rd-spike', 'pm-planning'],
+  images: ['/card-images/pic-8.png'],
   content: (
     <Steps>
       <li>
@@ -599,6 +600,7 @@ const crossTeamTracking = {
   roles: ['PM', 'RD', 'QA'],
   phases: ['pre-sprint', 'in-sprint'],
   contexts: ['pm-planning', 'pm-sprint', 'rd-dev', 'qa-testing'],
+  images: ['/card-images/pic-7.png'],
   content: (
     <>
       <p>SRE、EP 等專案外團隊有獨立的工作目標，當專案需要其支援時，可透過以下流程建立自動連動的追蹤機制：</p>
@@ -712,6 +714,7 @@ const abnormalClose = {
   roles: ['PM', 'RD', 'QA'],
   phases: ['in-sprint'],
   contexts: 'all',
+  images: ['/card-images/pic-9.png'],
   content: (
     <>
       <Steps>
