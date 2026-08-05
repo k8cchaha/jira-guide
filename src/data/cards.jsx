@@ -61,6 +61,7 @@ const taskHierarchy = {
   roles: ['PM', 'RD', 'QA'],
   phases: ['foundation'],
   contexts: 'all',
+  images: ['/card-images/pic-4.png'],
   content: (
     <>
       <p>三層級結構：<strong>Epic → 需求單（母單）→ 開發單（子單）</strong></p>
@@ -112,7 +113,7 @@ const storyVsTask = {
   roles: ['PM', 'RD', 'QA'],
   phases: ['foundation'],
   contexts: 'all',
-  images: ['/card-images/pic-3.png'],
+  images: ['/card-images/pic-5.png'],
   content: (
     <>
       <Tbl>
@@ -121,7 +122,7 @@ const storyVsTask = {
         <tr><td><strong>預設子單</strong></td><td>DEV-Task + QA-Task</td><td>僅 DEV-Task（有需要再手動加 QA-Task）</td></tr>
         <tr><td><strong>結束條件</strong></td><td>QA 在 Prod 環境驗證通過</td><td>Reviewer 確認後手動關閉</td></tr>
       </Tbl>
-      <p style={{ marginTop: 10, color: '#6B778C', fontSize: 12 }}><strong>Story / Bug 主流程：</strong></p>
+      <p style={{ marginTop: 10, color: '#6B778C', fontSize: 12 }}><strong>Story 主流程：</strong></p>
       <Flow>
         <St type="open">Open</St>
         <St type="prog">In Progress</St>
@@ -133,7 +134,7 @@ const storyVsTask = {
         <St type="ready">Prod Ready</St>
         <St type="done">Done</St>
       </Flow>
-      <p style={{ color: '#6B778C', fontSize: 12 }}><strong>Task / 子單 主流程：</strong></p>
+      <p style={{ color: '#6B778C', fontSize: 12 }}><strong>Task 主流程：</strong></p>
       <Flow>
         <St type="open">Open</St>
         <St type="prog">In Progress</St>
@@ -150,6 +151,7 @@ const childStatus = {
   roles: ['PM', 'RD', 'QA'],
   phases: ['foundation'],
   contexts: 'all',
+  images: ['/card-images/pic-6.png'],
   content: (
     <>
       <Callout type="info">
@@ -186,6 +188,7 @@ const parentStatus = {
   roles: ['PM', 'RD', 'QA'],
   phases: ['foundation'],
   contexts: 'all',
+  images: ['/card-images/pic-3.png'],
   content: (
     <>
       <Callout type="info">
