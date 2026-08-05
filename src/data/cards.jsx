@@ -29,7 +29,6 @@ const projectInfo = {
   roles: ['PM', 'RD', 'QA'],
   phases: ['foundation'],
   contexts: 'all',
-  images: ['/card-images/pic-1.jpg'],
   content: (
     <>
       <Tbl>
