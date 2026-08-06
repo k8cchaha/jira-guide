@@ -304,7 +304,7 @@ const ticketCreation = {
   roles: ['PM'],
   phases: ['pre-sprint'],
   contexts: ['pm-planning'],
-  images: ['/card-images/pic-10.png'],
+  images: ['/card-images/pic-11.png'],
   content: (
     <>
       <p style={{ fontWeight: 600, color: '#172B4D' }}>全自動一鍵建立</p>
