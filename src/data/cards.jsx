@@ -403,15 +403,24 @@ const specConfirm = {
   phases: ['pre-sprint'],
   contexts: ['rd-dev', 'qa-testing'],
   content: (
-    <Bullets>
-      <li>RD / QA 逐項確認 SPEC 與 A/C</li>
-      <li>有不清楚的部分：
-        <Bullets sub>
-          <li>留言到單上 Comment，Tag PM / QA</li>
-          <li>切換狀態到 <code>Request Info</code>，Assign to PM / 接球的同學</li>
-        </Bullets>
-      </li>
-    </Bullets>
+    <>
+      <Bullets>
+        <li>RD / QA 逐項確認 SPEC 與 A/C，確保開發與驗證有明確基準</li>
+        <li>遇到不清楚的部分：
+          <Bullets sub>
+            <li>在單上留言（Comment）並 Tag 相關 PM / QA</li>
+            <li>將狀態切換至 <code>Request Info</code>，並 Assign 給需要回覆的人</li>
+          </Bullets>
+        </li>
+        <li>對方回覆或補充說明後，確認無誤即可恢復正常狀態繼續進行</li>
+      </Bullets>
+      <Callout type="warning" style={{ marginTop: 10 }}>
+        請定期檢查是否有 <code>Request Info</code> 的票被 Assign 給自己，可能的情況：<br />
+        ・期望對方補充資訊，但忘記將票 Assign 給對方<br />
+        ・對方已回覆並將票還給你<br />
+        ・對方主動將票 Assign 給你等待確認
+      </Callout>
+    </>
   ),
 }
 
@@ -560,7 +569,7 @@ const actualSP = {
       <Bullets>
         <li>每張 DEV-Task 完成後，<strong>立即填入</strong> <code>Actual Story Points</code></li>
         <li>有效單（Resolution: Done / Fixed）：如實填入，最小單位 0.1</li>
-        <li>無效單（Duplicate / Won't Do…）：可不填，但若有花費時間，建議記錄</li>
+        <li>無效單（Resolution: Duplicate / Won't Do…）：可不填，但若有花費時間，建議記錄</li>
       </Bullets>
       <Callout type="danger" style={{ marginTop: 8 }}>
         母單的點數由 Automation 自動匯總，<strong>禁止(無法)手動修改母單的 Story Points / Actual Story Points</strong>。
