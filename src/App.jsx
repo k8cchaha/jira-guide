@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef, useLayoutEffect } from 'react'
 import { Header } from './components/Header'
 import { FilterBar } from './components/FilterBar'
 import { Card } from './components/Card'
@@ -175,9 +175,20 @@ export default function App() {
     [autoActive]
   )
 
+  const stickyRef = useRef(null)
+  useLayoutEffect(() => {
+    const el = stickyRef.current
+    if (!el) return
+    const obs = new ResizeObserver(() => {
+      document.documentElement.style.setProperty('--sticky-top', `${el.offsetHeight}px`)
+    })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
   return (
     <>
-      <div className="sticky-top">
+      <div className="sticky-top" ref={stickyRef}>
         <Header mode={mode} onModeChange={setMode} onReset={resetFilters} />
         {mode === 'workflow' && (
           <FilterBar
