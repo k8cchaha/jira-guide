@@ -647,4 +647,5 @@ code {
 
 @media (max-width: 430px) {
   .btn-label { display: none; }
+  .header-inner { align-items: flex-end; }
 }
