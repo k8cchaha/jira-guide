@@ -119,4 +119,11 @@ export const AUTOMATIONS = [
     action: '若為 Epic → 所有子單自動加上 OPbacklog Label\n若為 Story / Task → 所有 subtasks 的 Dev Type 設為 OP-Task',
     keywords: ['自動更新值'],
   },
+  {
+    id: 'bug-sprint-by-due-date',
+    purpose: '將被標記修復時間的 Bug 自動歸入對應的 Saku Sprint，省去手動設定 Sprint 的步驟',
+    trigger: 'SUN 專案的 Bug 的 Due date 欄位被更新時',
+    action: '為了保留開發時間 buffer，以迄日 + 2 天作為判斷基準\n找出「迄日 + 2 天 ≥ Due date」的最早 Saku Sprint，自動將 Sprint 欄位更新為該 sprint',
+    keywords: ['自動更新值'],
+  },
 ]
