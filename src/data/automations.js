@@ -96,7 +96,7 @@ export const AUTOMATIONS = [
     purpose: 'Issue 離開 Done 狀態時，自動清空 Resolution，防止報表統計出現誤差',
     trigger: 'Issue 狀態從 Done 切換至任何其他狀態',
     action: 'Resolution 欄位設為空值（null）',
-    keywords: ['狀態切換'],
+    keywords: ['自動更新值'],
   },
   {
     id: 'parent-status-by-deploy',
