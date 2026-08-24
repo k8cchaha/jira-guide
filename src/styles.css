@@ -285,14 +285,15 @@ code {
 /* FIELDS TABLE */
 .fields-table-wrap {
   grid-column: 1 / -1;
-  overflow-x: auto;
   margin-top: 4px;
+  min-width: 0;
+  border-radius: 6px;
+  overflow: clip;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 .fields-table {
   width: 100%; border-collapse: collapse;
   font-size: 13px; background: white;
-  border-radius: 6px; overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 .fields-table thead tr {
   background: #0052CC; color: white;
@@ -300,11 +301,15 @@ code {
 .fields-table th {
   padding: 10px 14px; font-size: 11px; font-weight: 700;
   letter-spacing: 0.4px; text-align: left; white-space: nowrap;
+  position: sticky;
+  top: var(--sticky-top, 0);
+  z-index: 10;
+  background: #0052CC;
 }
 .fields-table td {
   padding: 10px 14px; border-bottom: 1px solid #F4F5F7;
   vertical-align: top; color: #172B4D; line-height: 1.5;
-  white-space: pre-line;
+  white-space: pre-line; overflow-wrap: break-word;
 }
 .fields-table tbody tr:last-child td { border-bottom: none; }
 .fields-table tbody tr:nth-child(even) td { background: #FAFBFC; }
@@ -545,6 +550,10 @@ code {
   .col-who  { display: none; }
   .col-meta { display: table-cell; width: 110px; }
   .col-name { width: 110px; }
+
+  /* Fields: horizontal scroll on mobile, sticky header disabled */
+  .fields-table-wrap { overflow-x: auto; }
+  .fields-table th { position: static; }
 
   .meta-combined {
     display: flex; flex-direction: column; gap: 6px;
