@@ -561,7 +561,7 @@ code {
 
 .automation-table-wrap {
   grid-column: 1 / -1;
-  overflow-x: auto;
+  overflow-x: clip;
   padding: 0 24px 40px;
 }
 .automation-table {
