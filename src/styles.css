@@ -45,6 +45,7 @@ body {
   padding: 3px 12px; border-radius: 20px; cursor: pointer;
   font-size: 12px; font-family: inherit; transition: all 0.15s; white-space: nowrap;
   display: inline-flex; align-items: center; line-height: 1;
+  height: 22px;
 }
 .chip:hover { border-color: #0052CC; color: #0052CC; }
 .chip.active { color: white; }
@@ -561,36 +562,39 @@ code {
 
 .automation-table-wrap {
   grid-column: 1 / -1;
-  overflow-x: clip;
-  padding: 0 24px 40px;
+  padding: 0 0 40px;
+  margin-top: 4px;
 }
 .automation-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
   table-layout: fixed;
+  background: white;
+  border-radius: 6px;
+  overflow: clip;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
-.automation-table thead tr { background: #F4F5F7; }
+.automation-table thead tr { background: #0052CC; color: white; }
 .automation-table th {
-  padding: 10px 12px;
+  padding: 10px 14px;
   text-align: left;
   font-size: 11px;
   font-weight: 700;
-  color: #5E6C84;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  border-bottom: 2px solid #DFE1E6;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
   position: sticky;
   top: var(--sticky-top, 0);
   z-index: 10;
-  background: #F4F5F7;
+  background: #0052CC;
 }
 .automation-table td {
-  padding: 10px 12px;
+  padding: 10px 14px;
   vertical-align: top;
-  border-bottom: 1px solid #DFE1E6;
+  border-bottom: 1px solid #F4F5F7;
   color: #172B4D;
-  line-height: 1.55;
+  line-height: 1.5;
+  white-space: pre-line;
 }
 .automation-table tbody tr:last-child td { border-bottom: none; }
 .automation-table tbody tr:nth-child(even) td { background: #FAFBFC; }
@@ -637,7 +641,7 @@ code {
 }
 
 @media (max-width: 720px) {
-  .automation-table-wrap { padding: 0 12px 40px; }
+  .automation-table-wrap { padding: 0 0 40px; }
   .automation-table { table-layout: auto; }
   .col-trigger { display: none; }
   .col-action  { display: none; }
