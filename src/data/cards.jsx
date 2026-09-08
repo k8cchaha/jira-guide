@@ -455,7 +455,12 @@ const splitEstimate = {
   content: (
     <>
       <Steps>
-        <li>以<strong>需求單（Story / Task）</strong>為單位評估點數大小</li>
+        <li>以<strong>需求單（Story / Task）</strong>為單位評估點數大小
+          <Bullets sub style={{ marginTop: 4 }}>
+            <li><strong>Story / Task</strong>：點數以「一個 Sprint 內可完成」為基準</li>
+            <li><strong>DEV-Task</strong>：點數以「一週內可完成」為基準（&lt; 10 點）</li>
+          </Bullets>
+        </li>
         <li>若預估超過一個 Sprint 可完成的量 → 需進行拆分
           <Bullets sub style={{ marginTop: 4 }}>
             <li>建立數張 <strong>Task 票</strong>，將大需求切分為不同階段分批完成</li>
