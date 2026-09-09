@@ -601,8 +601,7 @@ const spike = {
           <li>若屬於多次討論類型，可註明預期進行方式（場數、Milestone）</li>
         </Bullets>
       </li>
-      <li>完成指定研究產出後，將 <strong>DEV-Task</strong> 切換至 <St type="done">Done</St>，母單狀態自動切換至 <St type="review">In Review</St></li>
-      <li>在母單 Comment 中 Tag 負責 Review 產出的人</li>
+      <li>完成指定研究產出後，將 <strong>DEV-Task</strong> 切換至 <St type="done">Done</St>，母單狀態自動切換至 <St type="review">In Review</St>，並且會自動 Assign 給 Reporter（負責人）</li>
       <li>負責人 Review 確認無誤後，<strong>手動</strong>將母單切換至 <St type="done">Done</St></li>
     </Steps>
   ),
