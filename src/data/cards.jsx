@@ -907,7 +907,8 @@ const specChange = {
       <Tbl style={{ marginTop: 10 }}>
         <tr><th>情況</th><th>處理方式</th></tr>
         <tr><td>能在 Release to PREP 前完成</td><td>正常流程開發，完成後重新送測，不影響 Release</td></tr>
-        <tr><td>來不及完成</td><td>需將已 merge 的半成品程式碼撤回，避免帶出未完成邏輯</td></tr>
+        <tr><td>來不及完成（允許部分上線）</td><td>將新需求移至新的單，放入下個 Sprint</td></tr>
+        <tr><td>來不及完成（下次一併發布）</td><td>需將已 merge 的半成品程式碼撤回，避免帶出未完成邏輯</td></tr>
       </Tbl>
       <Callout type="info" style={{ marginTop: 8 }}>
         若新增需求來不及在本次 Release 完成，PM 須與客戶確認後續處理方式：<strong>本次部分上線</strong>，或<strong>全部保留至下次一併發布</strong>。
