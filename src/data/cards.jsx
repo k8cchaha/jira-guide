@@ -890,36 +890,6 @@ const bugReopen = {
   ),
 }
 
-const helpFixBug = {
-  id: 'help-fix-bug',
-  title: '協助夥伴修復 Feature Bug',
-  roles: ['RD'],
-  phases: ['in-sprint'],
-  contexts: ['rd-bug'],
-  content: (
-    <>
-      <p>當 Feature Bug 由<strong>其他 RD 協助修復</strong>時，需明確區分「Bug 歸屬」與「執行歸屬」：</p>
-      <Tbl style={{ marginTop: 8 }}>
-        <tr><th>單據</th><th>Assignee</th><th>代表意義</th></tr>
-        <tr>
-          <td><strong>Bug 單（母單）</strong></td>
-          <td>原始開發者</td>
-          <td>此 Bug 由誰的開發造成</td>
-        </tr>
-        <tr>
-          <td><strong>DEV-Task（子單）</strong></td>
-          <td>協助修復者</td>
-          <td>實際執行修復的人</td>
-        </tr>
-      </Tbl>
-      <Callout type="warning" style={{ marginTop: 8 }}>
-        系統會分析每位 RD 的「功能開發點數 vs Bug 點數」比例作為開發品質指標。<br />
-        Bug 母單 Assignee 決定 Bug 歸屬於誰，若填錯會影響協助者的品質數據。
-      </Callout>
-    </>
-  ),
-}
-
 const specChange = {
   id: 'spec-change',
   title: 'SPEC Change 處理',
@@ -977,6 +947,5 @@ export const CARDS = [
   qaVerify,
   verifyFoundBug,
   bugReopen,
-  helpFixBug,
   specChange,
 ]
