@@ -296,6 +296,51 @@ const securityLevel = {
   ),
 }
 
+const impactScope = {
+  id: 'impact-scope',
+  title: '[Saku 專屬] OP 相關票 — Impact Scope 填寫規範',
+  roles: ['PM', 'RD'],
+  phases: ['in-sprint'],
+  contexts: ['pm-planning', 'rd-dev', 'rd-bug'],
+  content: (
+    <>
+      <p><code>Impact Scope</code> 用來讓客戶掌握 OP 相關票是否涉及其關注的三個面向。請依實際變更範圍選擇 <strong>License / Playback / Reports</strong>，若同時涉及多個面向則分別選取。</p>
+      <Tbl style={{ marginTop: 8 }}>
+        <tr><th style={{ width: '18%' }}>面向</th><th>確認項目</th></tr>
+        <tr>
+          <td><strong>License</strong></td>
+          <td>
+            <Bullets>
+              <li>購買邏輯是否有變更</li>
+              <li>購買流程是否有變更</li>
+              <li>觀看權限判定邏輯</li>
+              <li>顯示邏輯</li>
+              <li>合約判定</li>
+            </Bullets>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Playback</strong></td>
+          <td>Player 周邊是否有任何變更</td>
+        </tr>
+        <tr>
+          <td><strong>Reports</strong></td>
+          <td>
+            <Bullets>
+              <li>與報表相關的 Amplitude 變更</li>
+              <li>CP/BI Reports</li>
+              <li>報表產生邏輯：Billing Logs、EST Integration Logs、Campaign Logs、CP/BI Reports</li>
+            </Bullets>
+          </td>
+        </tr>
+      </Tbl>
+      <Callout type="warning" style={{ marginTop: 8 }}>
+        只要上述範圍發生變更，就應選取對應的 Impact Scope；包含<strong>程式碼修改、Refactoring、版本更新</strong>等情況。
+      </Callout>
+    </>
+  ),
+}
+
 // ─────────────────────────── Sprint 規劃前 ───────────────────────────
 
 const ticketCreation = {
@@ -803,6 +848,14 @@ const requiredFieldsCheck = {
               </Bullets>
             </td>
           </tr>
+          <tr>
+            <td>[Saku] OP 的 Story / Task / Bug</td>
+            <td>
+              <Bullets>
+                <li>Impact Scope</li>
+              </Bullets>
+            </td>
+          </tr>
         </tbody>
       </Tbl>
     </>
@@ -927,6 +980,7 @@ export const CARDS = [
   childStatus,
   parentStatus,
   securityLevel,
+  impactScope,
   ticketCreation,
   crossTeamTracking,
   spike,
