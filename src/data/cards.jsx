@@ -980,7 +980,6 @@ export const CARDS = [
   childStatus,
   parentStatus,
   securityLevel,
-  impactScope,
   ticketCreation,
   crossTeamTracking,
   spike,
@@ -1005,5 +1004,6 @@ export const CARDS = [
   qaVerify,
   verifyFoundBug,
   bugReopen,
+  impactScope,
   specChange,
 ]
