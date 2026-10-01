@@ -298,13 +298,13 @@ const securityLevel = {
 
 const impactScope = {
   id: 'impact-scope',
-  title: '[Saku 專屬] OP 相關票 — Impact Scope 填寫規範',
+  title: '[Saku 專屬] Impact Scope 填寫規範',
   roles: ['PM', 'RD'],
   phases: ['in-sprint'],
   contexts: ['pm-planning', 'rd-dev', 'rd-bug'],
   content: (
     <>
-      <p><code>Impact Scope</code> 用來讓客戶掌握 OP 相關票是否涉及其關注的三個面向。請依實際變更範圍選擇 <strong>License / Playback / Reports</strong>，若同時涉及多個面向則分別選取。</p>
+      <p><code>Impact Scope</code> 用來讓客戶掌握該張票是否涉及其關注的三個面向。請依實際變更範圍選擇 <strong>License / Playback / Reports</strong>，若同時涉及多個面向則分別選取。</p>
       <Tbl style={{ marginTop: 8 }}>
         <tr><th style={{ width: '18%' }}>面向</th><th>確認項目</th></tr>
         <tr>
@@ -849,7 +849,7 @@ const requiredFieldsCheck = {
             </td>
           </tr>
           <tr>
-            <td>[Saku] OP 的 Story / Task / Bug</td>
+            <td>[Saku] Story / Task / Bug</td>
             <td>
               <Bullets>
                 <li>Impact Scope</li>
