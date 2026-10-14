@@ -1,140 +1,134 @@
 import { useState, useMemo, useEffect, useRef, useLayoutEffect } from 'react'
 import { Header } from './components/Header'
-import { FilterBar } from './components/FilterBar'
+import { WorkflowQuestionBar } from './components/WorkflowQuestionBar'
 import { Card } from './components/Card'
 import { FieldsFilterBar } from './components/FieldsFilterBar'
 import { FieldsTable } from './components/FieldsTable'
 import { AutomationFilterBar } from './components/AutomationFilterBar'
 import { AutomationTable } from './components/AutomationTable'
-import { PHASES, ROLE_CONTEXTS } from './data/filters'
+import { PHASES, ROLES } from './data/filters'
 import { CARDS } from './data/cards'
 import { FIELDS } from './data/fields'
 import { AUTOMATIONS } from './data/automations'
 
-const ALL_PHASE_IDS = PHASES.map(p => p.id)
-const EMPTY = { role: new Set(), phase: new Set(), context: new Set() }
+const ALL_PHASE_IDS = PHASES.map(phase => phase.id)
+const VALID_ROLES = new Set(ROLES)
+const VALID_PHASES = new Set(ALL_PHASE_IDS)
+const VALID_CARD_IDS = new Set(CARDS.map(card => card.id))
+const EMPTY = { role: new Set(), phase: new Set() }
 const FIELDS_EMPTY = { role: new Set(), issueType: new Set(), timing: new Set(), required: false }
 const AUTO_EMPTY = new Set()
 const LS_KEY = 'jira-guide-filters'
+const LS_VERSION = 2
 
 function loadFromStorage() {
   try {
     const raw = localStorage.getItem(LS_KEY)
     if (!raw) return EMPTY
-    const { role, phase, context } = JSON.parse(raw)
-    return {
-      role:    new Set(role    ?? []),
-      phase:   new Set(phase   ?? []),
-      context: new Set(context ?? []),
-    }
+    const saved = JSON.parse(raw)
+    const role = Array.isArray(saved?.role) ? saved.role.filter(value => VALID_ROLES.has(value)) : []
+    const phase = Array.isArray(saved?.phase) ? saved.phase.filter(value => VALID_PHASES.has(value)) : []
+    return { role: new Set(role), phase: new Set(phase) }
   } catch {
     return EMPTY
   }
 }
 
 function saveToStorage(active) {
-  localStorage.setItem(LS_KEY, JSON.stringify({
-    role:    [...active.role],
-    phase:   [...active.phase],
-    context: [...active.context],
-  }))
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify({
+      version: LS_VERSION,
+      role: [...active.role],
+      phase: [...active.phase],
+    }))
+  } catch {
+    // Filtering continues to work if browser storage is unavailable.
+  }
 }
 
-function isVisible(card, active) {
-  const contexts = card.contexts === 'all' ? null : card.contexts
-  if (active.role.size > 0 && !card.roles.some(r => active.role.has(r))) return false
-  if (active.phase.size > 0 && !card.phases.some(p => active.phase.has(p))) return false
-  if (active.context.size > 0 && (contexts === null || !contexts.some(c => active.context.has(c)))) return false
+function passesManualFilters(card, active) {
+  if (active.role.size > 0 && !card.roles.some(role => active.role.has(role))) return false
+  if (active.phase.size > 0 && !card.phases.some(phase => active.phase.has(phase))) return false
   return true
 }
 
-// A section is "on" when no phase filter is active, or this phase is included
 function isSectionOn(phaseId, activePhase) {
   return activePhase.size === 0 || activePhase.has(phaseId)
 }
 
 function isFieldVisible(field, active) {
   if (active.required && !field.required) return false
-  if (active.role.size > 0 && field.roles.length > 0 && !field.roles.some(r => active.role.has(r))) return false
-  if (active.issueType.size > 0 && !field.issueTypeGroups.includes('all') && !field.issueTypeGroups.some(g => active.issueType.has(g))) return false
-  if (active.timing.size > 0 && !field.timing.some(t => active.timing.has(t))) return false
+  if (active.role.size > 0 && field.roles.length > 0 && !field.roles.some(role => active.role.has(role))) return false
+  if (active.issueType.size > 0 && !field.issueTypeGroups.includes('all') && !field.issueTypeGroups.some(group => active.issueType.has(group))) return false
+  if (active.timing.size > 0 && !field.timing.some(timing => active.timing.has(timing))) return false
   return true
 }
 
 export default function App() {
   const [mode, setMode] = useState('workflow')
   const [active, setActive] = useState(loadFromStorage)
+  const [aiResult, setAiResult] = useState(null)
+  const [aiSearching, setAiSearching] = useState(false)
   const [fieldsActive, setFieldsActive] = useState(FIELDS_EMPTY)
   const [autoActive, setAutoActive] = useState(AUTO_EMPTY)
 
   useEffect(() => { saveToStorage(active) }, [active])
 
   function toggleFieldsFilter(type, value) {
-    setFieldsActive(prev => {
-      if (type === 'required') return { ...prev, required: !prev.required }
-      const next = new Set(prev[type])
+    setFieldsActive(previous => {
+      if (type === 'required') return { ...previous, required: !previous.required }
+      const next = new Set(previous[type])
       if (next.has(value)) next.delete(value)
       else next.add(value)
-      return { ...prev, [type]: next }
+      return { ...previous, [type]: next }
     })
   }
 
   function toggleFilter(type, value) {
-    setActive(prev => {
-      const next = new Set(prev[type])
+    setActive(previous => {
+      const next = new Set(previous[type])
       if (next.has(value)) next.delete(value)
       else next.add(value)
-
-      if (type === 'role') {
-        const available = next.size === 0
-          ? new Set(Object.values(ROLE_CONTEXTS).flat().map(c => c.id))
-          : new Set([...next].flatMap(r => (ROLE_CONTEXTS[r] ?? []).map(c => c.id)))
-        const nextCtx = new Set([...prev.context].filter(c => available.has(c)))
-        return { ...prev, role: next, context: nextCtx }
-      }
-
-      return { ...prev, [type]: next }
+      return { ...previous, [type]: next }
     })
   }
 
-  // Toggle a section's visibility by manipulating the phase filter
-  // — same state as filter chips, so they always stay in sync
   function toggleSection(phaseId) {
-    setActive(prev => {
-      // Treat empty filter as "all visible"
-      const currentVisible = prev.phase.size === 0
+    setActive(previous => {
+      const currentVisible = previous.phase.size === 0
         ? new Set(ALL_PHASE_IDS)
-        : new Set(prev.phase)
+        : new Set(previous.phase)
 
       let next
       if (currentVisible.has(phaseId)) {
-        // Hide this section: remove from currently visible (not from ALL)
         next = new Set([...currentVisible].filter(id => id !== phaseId))
       } else {
-        // Show this section: add it back
         next = new Set(currentVisible)
         next.add(phaseId)
       }
 
-      // When all phases are selected, use empty filter (cleaner state = "show all")
       if (next.size === ALL_PHASE_IDS.length) next = new Set()
-
-      return { ...prev, phase: next }
+      return { ...previous, phase: next }
     })
   }
 
-  function toggleAutoFilter(kw) {
-    setAutoActive(prev => {
-      const next = new Set(prev)
-      if (next.has(kw)) next.delete(kw)
-      else next.add(kw)
+  function toggleAutoFilter(keyword) {
+    setAutoActive(previous => {
+      const next = new Set(previous)
+      if (next.has(keyword)) next.delete(keyword)
+      else next.add(keyword)
       return next
     })
   }
 
+  function changeMode(nextMode) {
+    if (mode === 'workflow' && nextMode !== 'workflow') setAiSearching(false)
+    setMode(nextMode)
+  }
+
   function resetFilters() {
     if (mode === 'workflow') {
-      setActive({ role: new Set(), phase: new Set(), context: new Set() })
+      setActive({ role: new Set(), phase: new Set() })
     } else if (mode === 'fields') {
       setFieldsActive(FIELDS_EMPTY)
     } else {
@@ -142,59 +136,77 @@ export default function App() {
     }
   }
 
-  const visibleCards = useMemo(
-    () => new Set(CARDS.filter(c => isVisible(c, active)).map(c => c.id)),
+  const aiCardIds = useMemo(
+    () => aiResult
+      ? new Set(aiResult.cardIds.filter(id => VALID_CARD_IDS.has(id)))
+      : null,
+    [aiResult]
+  )
+
+  const manualVisibleCards = useMemo(
+    () => new Set(CARDS.filter(card => passesManualFilters(card, active)).map(card => card.id)),
     [active]
   )
 
-  // Cards that pass role/context filter (ignoring phase) — used to decide
-  // whether a section label should render at all
-  const roleContextVisible = useMemo(
-    () => new Set(CARDS.filter(c => isVisible(c, { ...active, phase: new Set() })).map(c => c.id)),
-    [active]
-  )
+  const visibleCards = useMemo(() => {
+    if (aiSearching) return new Set()
+    if (!aiCardIds) return manualVisibleCards
+    return new Set([...manualVisibleCards].filter(id => aiCardIds.has(id)))
+  }, [aiCardIds, aiSearching, manualVisibleCards])
+
+  const sectionRelevantCards = useMemo(() => {
+    if (aiSearching) return new Set()
+    const withoutPhase = { ...active, phase: new Set() }
+    return new Set(CARDS
+      .filter(card => passesManualFilters(card, withoutPhase))
+      .filter(card => !aiCardIds || aiCardIds.has(card.id))
+      .map(card => card.id))
+  }, [active, aiCardIds, aiSearching])
 
   const sections = useMemo(() => PHASES.map(phase => {
-    const cards = CARDS.filter(c => (c.section ?? c.phases[0]) === phase.id)
-    const relevantCards = cards.filter(c => roleContextVisible.has(c.id))
+    const cards = CARDS.filter(card => (card.section ?? card.phases[0]) === phase.id)
+    const relevantCards = cards.filter(card => sectionRelevantCards.has(card.id))
     const on = isSectionOn(phase.id, active.phase)
     return { phase, cards, relevantCards, on }
-  }), [active, visibleCards, roleContextVisible])
+  }), [active.phase, sectionRelevantCards])
 
   const totalVisible = visibleCards.size
+  const hasManualFilters = active.role.size > 0 || active.phase.size > 0
 
   const filteredFields = useMemo(
-    () => FIELDS.filter(f => isFieldVisible(f, fieldsActive)),
+    () => FIELDS.filter(field => isFieldVisible(field, fieldsActive)),
     [fieldsActive]
   )
 
   const filteredAutomations = useMemo(
     () => autoActive.size === 0
       ? AUTOMATIONS
-      : AUTOMATIONS.filter(a => a.keywords.some(kw => autoActive.has(kw))),
+      : AUTOMATIONS.filter(automation => automation.keywords.some(keyword => autoActive.has(keyword))),
     [autoActive]
   )
 
   const stickyRef = useRef(null)
   useLayoutEffect(() => {
-    const el = stickyRef.current
-    if (!el) return
-    const obs = new ResizeObserver(() => {
-      document.documentElement.style.setProperty('--sticky-top', `${el.offsetHeight}px`)
+    const element = stickyRef.current
+    if (!element) return
+    const observer = new ResizeObserver(() => {
+      document.documentElement.style.setProperty('--sticky-top', `${element.offsetHeight}px`)
     })
-    obs.observe(el)
-    return () => obs.disconnect()
+    observer.observe(element)
+    return () => observer.disconnect()
   }, [])
 
   return (
     <>
       <div className="sticky-top" ref={stickyRef}>
-        <Header mode={mode} onModeChange={setMode} onReset={resetFilters} />
+        <Header mode={mode} onModeChange={changeMode} onReset={resetFilters} />
         {mode === 'workflow' && (
-          <FilterBar
+          <WorkflowQuestionBar
+            result={aiResult}
+            onResultChange={setAiResult}
+            onSearchingChange={setAiSearching}
             active={active}
             onToggle={toggleFilter}
-            onReset={resetFilters}
             visible={totalVisible}
             total={CARDS.length}
           />
@@ -221,9 +233,7 @@ export default function App() {
         {mode === 'fields' && <FieldsTable fields={filteredFields} />}
         {mode === 'automation' && <AutomationTable automations={filteredAutomations} />}
         {mode === 'workflow' && sections.map(({ phase, cards, relevantCards, on }) => {
-          if (cards.length === 0) return null
-          // Hide label entirely when no cards are relevant (e.g. role filter removes all)
-          if (relevantCards.length === 0) return null
+          if (cards.length === 0 || relevantCards.length === 0) return null
 
           return (
             <SectionGroup
@@ -242,26 +252,37 @@ export default function App() {
           )
         })}
 
-        {mode === 'workflow' && totalVisible === 0 && (
+        {mode === 'workflow' && !aiSearching && totalVisible === 0 && aiResult && aiCardIds.size === 0 && (
+          <div className="no-results">
+            <p>{aiResult.cardIds.length === 0 ? 'AI 找不到直接相關的規範' : 'AI 結果與目前版本的規範不相容'}</p>
+            <p>請換個方式描述問題，或清除 AI 結果查看全部內容。</p>
+          </div>
+        )}
+        {mode === 'workflow' && !aiSearching && totalVisible === 0 && aiResult && aiCardIds.size > 0 && hasManualFilters && (
+          <div className="no-results">
+            <p>AI 結果與目前手動篩選沒有交集</p>
+            <p>請調整角色或階段篩選；清除篩選不會移除 AI 結果。</p>
+          </div>
+        )}
+        {mode === 'workflow' && !aiSearching && totalVisible === 0 && !aiResult && (
           <div className="no-results">
             <p>目前篩選條件無符合的內容</p>
-            <p>請調整篩選條件，或<button onClick={resetFilters}>清除全部篩選</button></p>
+            <p>請調整篩選條件，或<button type="button" onClick={resetFilters}>清除全部篩選</button></p>
           </div>
         )}
       </main>
-
     </>
   )
 }
 
 function EyeIcon({ open }) {
   return open ? (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
       <circle cx="12" cy="12" r="3" />
     </svg>
   ) : (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
       <line x1="1" y1="1" x2="23" y2="23" />
     </svg>
@@ -274,9 +295,11 @@ function SectionGroup({ phaseId, label, on, onToggle, children }) {
       <div className={`section-label${on ? '' : ' section-off'}`}>
         <span>{label}</span>
         <button
+          type="button"
           className="section-eye"
           onClick={() => onToggle(phaseId)}
           title={on ? '隱藏此區段' : '顯示此區段'}
+          aria-label={on ? `隱藏${label}區段` : `顯示${label}區段`}
         >
           <EyeIcon open={on} />
         </button>
@@ -285,4 +308,3 @@ function SectionGroup({ phaseId, label, on, onToggle, children }) {
     </>
   )
 }
-

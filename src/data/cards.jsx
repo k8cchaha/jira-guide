@@ -1,16 +1,16 @@
 import { Callout, Tbl, Steps, Bullets, Flow, St } from '../ui'
+import { WORKFLOW_CATALOG } from '../../shared/workflowCatalog'
 
 /**
  * 卡片資料結構：
  *
  * {
- *   id:       string        — 唯一識別碼
- *   title:    string        — 卡片標題
- *   roles:    string[]      — 適用角色：'PM' | 'RD' | 'QA'
- *   phases:   string[]      — 篩選階段（可多選）
- *   section:  string        — 顯示在哪個 section（預設取 phases[0]）
- *   contexts: string[]|'all'— 任務情境 id，'all' 表示通用
+ *   id:       string        — 唯一識別碼，用來與 server-safe catalog 配對
  *   content:  JSX           — 卡片主體，完全自由組合
+ *   images:   string[]      — 選填；presentation 專用圖片
+ *
+ * title / roles / phases / section / contexts / bodyText / aliases
+ * 統一定義於 shared/workflowCatalog.js，避免 server runtime import JSX。
  * }
  *
  * 可用 UI 元件（from '../ui'）：
@@ -25,10 +25,6 @@ import { Callout, Tbl, Steps, Bullets, Flow, St } from '../ui'
 
 const projectInfo = {
   id: 'project-info',
-  title: '專案資訊',
-  roles: ['PM', 'RD', 'QA'],
-  phases: ['foundation'],
-  contexts: 'all',
   content: (
     <>
       <Tbl>
@@ -56,10 +52,6 @@ const projectInfo = {
 
 const taskHierarchy = {
   id: 'task-hierarchy',
-  title: '任務階層結構',
-  roles: ['PM', 'RD', 'QA'],
-  phases: ['foundation'],
-  contexts: 'all',
   images: ['/card-images/pic-4.png'],
   content: (
     <>
@@ -82,10 +74,6 @@ const taskHierarchy = {
 
 const pointsRules = {
   id: 'points-rules',
-  title: '點數規範',
-  roles: ['PM', 'RD', 'QA'],
-  phases: ['foundation'],
-  contexts: 'all',
   content: (
     <>
       <Tbl>
@@ -108,10 +96,6 @@ const pointsRules = {
 
 const storyVsTask = {
   id: 'story-vs-task',
-  title: 'Story vs Task 核心差異',
-  roles: ['PM', 'RD', 'QA'],
-  phases: ['foundation'],
-  contexts: 'all',
   images: ['/card-images/pic-5.png'],
   content: (
     <>
@@ -146,10 +130,6 @@ const storyVsTask = {
 
 const childStatus = {
   id: 'child-status',
-  title: '子單狀態切換',
-  roles: ['PM', 'RD', 'QA'],
-  phases: ['foundation'],
-  contexts: 'all',
   images: ['/card-images/pic-6.png'],
   content: (
     <>
@@ -183,10 +163,6 @@ const childStatus = {
 
 const parentStatus = {
   id: 'parent-status',
-  title: '母單狀態切換',
-  roles: ['PM', 'RD', 'QA'],
-  phases: ['foundation'],
-  contexts: 'all',
   images: ['/card-images/pic-3.png'],
   content: (
     <>
@@ -265,10 +241,6 @@ const parentStatus = {
 
 const securityLevel = {
   id: 'security-level',
-  title: '權限控管',
-  roles: ['PM'],
-  phases: ['foundation'],
-  contexts: 'all',
   content: (
     <>
       <p>專案使用 <strong>Security Level</strong> 控管單據的存取範圍：</p>
@@ -298,10 +270,6 @@ const securityLevel = {
 
 const impactScope = {
   id: 'impact-scope',
-  title: '[Saku 專屬] Impact Scope 填寫規範',
-  roles: ['PM', 'RD'],
-  phases: ['in-sprint'],
-  contexts: ['pm-planning', 'rd-dev', 'rd-bug'],
   content: (
     <>
       <p><code>Impact Scope</code> 用來讓客戶掌握該張票是否涉及其關注的三個面向。請依實際變更範圍選擇 <strong>License / Playback / Reports</strong>，若同時涉及多個面向則分別選取。</p>
@@ -345,10 +313,6 @@ const impactScope = {
 
 const ticketCreation = {
   id: 'ticket-creation',
-  title: '需求開單規範',
-  roles: ['PM'],
-  phases: ['pre-sprint'],
-  contexts: ['pm-planning'],
   images: ['/card-images/pic-11.png'],
   content: (
     <>
@@ -382,10 +346,6 @@ const ticketCreation = {
 
 const dor = {
   id: 'dor',
-  title: '需求就緒',
-  roles: ['PM', 'RD', 'QA'],
-  phases: ['pre-sprint'],
-  contexts: ['pm-planning'],
   content: (
     <>
       <p>進入 Sprint 前，需求單必須符合 DoR（Definition of Ready）：</p>
@@ -400,10 +360,6 @@ const dor = {
 
 const estimatedEffort = {
   id: 'estimated-effort',
-  title: '需求粗估（Optional）',
-  roles: ['PM', 'RD'],
-  phases: ['pre-sprint'],
-  contexts: ['pm-planning'],
   content: (
     <>
       <Steps>
@@ -423,10 +379,6 @@ const estimatedEffort = {
 
 const sprintPlanning = {
   id: 'sprint-planning',
-  title: '規劃 Sprint 需求並排序',
-  roles: ['PM'],
-  phases: ['pre-sprint'],
-  contexts: ['pm-sprint'],
   content: (
     <>
       <Bullets>
@@ -443,10 +395,6 @@ const sprintPlanning = {
 
 const specConfirm = {
   id: 'spec-confirm',
-  title: 'SPEC & A/C 確認',
-  roles: ['RD', 'QA'],
-  phases: ['pre-sprint'],
-  contexts: ['rd-dev', 'qa-testing'],
   content: (
     <>
       <Bullets>
@@ -471,10 +419,6 @@ const specConfirm = {
 
 const autoSubtaskRules = {
   id: 'auto-subtask-rules',
-  title: '自動建單規則',
-  roles: ['PM', 'RD', 'QA'],
-  phases: ['pre-sprint'],
-  contexts: ['pm-planning', 'rd-dev'],
   content: (
     <>
       <Tbl>
@@ -492,10 +436,6 @@ const autoSubtaskRules = {
 
 const splitEstimate = {
   id: 'split-estimate',
-  title: '拆單 & 估點',
-  roles: ['RD', 'QA'],
-  phases: ['pre-sprint'],
-  contexts: ['rd-dev'],
   images: ['/card-images/pic-2.png'],
   content: (
     <>
@@ -525,10 +465,6 @@ const splitEstimate = {
 
 const qaTaskRules = {
   id: 'qa-task-rules',
-  title: 'DEV-Task / QA-Task 建立規則',
-  roles: ['RD', 'QA'],
-  phases: ['pre-sprint'],
-  contexts: ['rd-dev', 'qa-testing'],
   content: (
     <>
       <Tbl>
@@ -562,10 +498,6 @@ const qaTaskRules = {
 
 const startDev = {
   id: 'start-dev',
-  title: '開始開發',
-  roles: ['RD'],
-  phases: ['in-sprint'],
-  contexts: ['rd-dev', 'rd-bug'],
   content: (
     <>
       <Steps>
@@ -585,11 +517,6 @@ const startDev = {
 
 const gitMR = {
   id: 'git-mr',
-  title: 'Git MR 自動化流程',
-  roles: ['RD'],
-  phases: ['in-sprint', 'deploy'],
-  section: 'in-sprint',
-  contexts: ['rd-dev', 'rd-bug'],
   content: (
     <>
       <p><strong>有進 Code 的 DEV-Task：</strong></p>
@@ -610,10 +537,6 @@ const gitMR = {
 
 const actualSP = {
   id: 'actual-sp',
-  title: '開發完成 — Actual Story Points 回填',
-  roles: ['RD'],
-  phases: ['in-sprint'],
-  contexts: ['rd-dev'],
   content: (
     <>
       <Bullets>
@@ -630,10 +553,6 @@ const actualSP = {
 
 const spike = {
   id: 'spike',
-  title: 'Spike 研究型任務',
-  roles: ['RD', 'PM', 'QA'],
-  phases: ['pre-sprint', 'in-sprint'],
-  contexts: ['rd-spike', 'pm-planning'],
   images: ['/card-images/pic-8.png'],
   content: (
     <Steps>
@@ -654,10 +573,6 @@ const spike = {
 
 const crossTeamTracking = {
   id: 'cross-team-tracking',
-  title: '跨團隊工作追蹤（SRE / EP / SDET）',
-  roles: ['PM', 'RD', 'QA'],
-  phases: ['pre-sprint', 'in-sprint'],
-  contexts: ['pm-planning', 'pm-sprint', 'rd-dev', 'qa-testing'],
   images: ['/card-images/pic-7.png'],
   content: (
     <>
@@ -677,10 +592,6 @@ const crossTeamTracking = {
 
 const bugCreate = {
   id: 'bug-create',
-  title: 'Bug 開單規範',
-  roles: ['QA'],
-  phases: ['deploy'],
-  contexts: ['qa-bug'],
   content: (
     <>
       <p><strong>Description 格式（必填）：</strong></p>
@@ -703,10 +614,6 @@ const bugCreate = {
 
 const bugFix = {
   id: 'bug-fix',
-  title: 'Bug 修復流程',
-  roles: ['RD'],
-  phases: ['in-sprint'],
-  contexts: ['rd-bug'],
   content: (
     <>
       <Steps>
@@ -730,10 +637,6 @@ const bugFix = {
 
 const bugSpecialCase = {
   id: 'bug-special',
-  title: 'Bug 特殊情況處理',
-  roles: ['RD', 'QA'],
-  phases: ['in-sprint'],
-  contexts: ['rd-bug', 'qa-bug'],
   content: (
     <Tbl>
       <tr><th>情況</th><th>操作</th></tr>
@@ -747,10 +650,6 @@ const bugSpecialCase = {
 
 const sprintInsert = {
   id: 'sprint-insert',
-  title: '插單（Sprint 中加入新需求）',
-  roles: ['PM', 'RD'],
-  phases: ['in-sprint'],
-  contexts: ['pm-sprint', 'rd-dev'],
   content: (
     <>
       <Callout type="warning">
@@ -768,10 +667,6 @@ const sprintInsert = {
 
 const abnormalClose = {
   id: 'abnormal-close',
-  title: '異常結束處理（無效單）',
-  roles: ['PM', 'RD', 'QA'],
-  phases: ['in-sprint'],
-  contexts: 'all',
   images: ['/card-images/pic-9.png'],
   content: (
     <>
@@ -792,10 +687,6 @@ const abnormalClose = {
 
 const devTaskCarryover = {
   id: 'dev-task-carryover',
-  title: '需求跨 Sprint 處理',
-  roles: ['PM', 'RD', 'QA'],
-  phases: ['end-sprint'],
-  contexts: 'all',
   content: (
     <>
       <p>以<strong>母單（Story / Task / Bug）</strong>為基準，判斷跨 Sprint 的處理方式：</p>
@@ -819,10 +710,6 @@ const devTaskCarryover = {
 
 const requiredFieldsCheck = {
   id: 'required-fields-check',
-  title: '必填欄位檢核',
-  roles: ['PM', 'RD', 'QA'],
-  phases: ['end-sprint'],
-  contexts: 'all',
   content: (
     <>
       <p>將不合規的單列出，請同學儘速補齊必要資訊：</p>
@@ -864,10 +751,6 @@ const requiredFieldsCheck = {
 
 const sprintCoexist = {
   id: 'sprint-coexist',
-  title: 'Sprint 並存說明',
-  roles: ['PM', 'RD', 'QA'],
-  phases: ['end-sprint'],
-  contexts: 'all',
   content: (
     <Bullets>
       <li>從開發到環境部署、QA 驗證是<strong>完整的開發 Cycle</strong>，需求（Story / Bug）橫跨多個 Sprint 是正常流程，不是例外</li>
@@ -881,10 +764,6 @@ const sprintCoexist = {
 
 const qaVerify = {
   id: 'qa-verify',
-  title: 'QA 驗證流程',
-  roles: ['QA'],
-  phases: ['deploy'],
-  contexts: ['qa-testing', 'qa-bug'],
   content: (
     <>
       <Steps>
@@ -905,10 +784,6 @@ const qaVerify = {
 
 const verifyFoundBug = {
   id: 'verify-found-bug',
-  title: '驗證過程發現 Bug',
-  roles: ['QA'],
-  phases: ['deploy'],
-  contexts: ['qa-bug', 'qa-testing'],
   content: (
     <>
       <Steps>
@@ -927,10 +802,6 @@ const verifyFoundBug = {
 
 const bugReopen = {
   id: 'bug-reopen',
-  title: 'Bug ReOpen 處理',
-  roles: ['QA', 'RD'],
-  phases: ['in-sprint', 'deploy'],
-  contexts: ['qa-bug', 'rd-bug'],
   content: (
     <>
       <p>RD 修復後 QA 驗證，發現問題仍存在：</p>
@@ -945,11 +816,6 @@ const bugReopen = {
 
 const specChange = {
   id: 'spec-change',
-  title: 'SPEC Change 處理',
-  roles: ['RD', 'PM'],
-  phases: ['deploy'],
-  section: 'deploy',
-  contexts: ['rd-dev', 'pm-sprint'],
   content: (
     <>
       <p>當母單已進入 Deploy 階段（QA Ready、PREP Ready…）後因 SPEC 變更需加開 DEV-Task：</p>
@@ -972,7 +838,7 @@ const specChange = {
 
 // ─────────────────────────── 匯出 ───────────────────────────
 
-export const CARDS = [
+const CARD_PRESENTATIONS = [
   projectInfo,
   taskHierarchy,
   pointsRules,
@@ -1007,3 +873,38 @@ export const CARDS = [
   impactScope,
   specChange,
 ]
+
+function indexPresentationsById(presentations) {
+  const byId = new Map()
+  for (const presentation of presentations) {
+    if (byId.has(presentation.id)) {
+      throw new Error(`Duplicate workflow presentation id: ${presentation.id}`)
+    }
+    byId.set(presentation.id, presentation)
+  }
+  return byId
+}
+
+const presentationsById = indexPresentationsById(CARD_PRESENTATIONS)
+const catalogById = new Map(WORKFLOW_CATALOG.map(card => [card.id, card]))
+const catalogIds = new Set(catalogById.keys())
+
+const missingPresentations = WORKFLOW_CATALOG
+  .filter(card => !presentationsById.has(card.id))
+  .map(card => card.id)
+const missingMetadata = CARD_PRESENTATIONS
+  .filter(card => !catalogIds.has(card.id))
+  .map(card => card.id)
+
+if (missingPresentations.length || missingMetadata.length) {
+  throw new Error([
+    missingPresentations.length && `Missing workflow presentations: ${missingPresentations.join(', ')}`,
+    missingMetadata.length && `Missing workflow catalog metadata: ${missingMetadata.join(', ')}`,
+  ].filter(Boolean).join('; '))
+}
+
+// Preserve the established presentation order while making catalog metadata authoritative.
+export const CARDS = CARD_PRESENTATIONS.map((presentation) => ({
+  ...presentation,
+  ...catalogById.get(presentation.id),
+}))

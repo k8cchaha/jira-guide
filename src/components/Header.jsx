@@ -42,7 +42,7 @@ export function Header({ mode, onModeChange, onReset }) {
                 <line x1="1" y1="9" x2="4.5" y2="9" />
               </g>
             </svg>
-            <span className="btn-label">小幫手</span>
+            <span className="btn-label">使用指南</span>
           </button>
           <button className="reset-btn" onClick={onReset}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

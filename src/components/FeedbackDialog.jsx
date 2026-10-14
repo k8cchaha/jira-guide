@@ -110,7 +110,7 @@ export function FeedbackDialog({ open, onClose }) {
     <div className="dialog-overlay">
       <div className="dialog" onClick={e => e.stopPropagation()}>
         <div className="dialog-header">
-          <span className="dialog-title">意見反饋</span>
+          <span className="dialog-title">網站指南與反饋</span>
           <button className="dialog-close" onClick={onClose}>×</button>
         </div>
 
@@ -144,7 +144,7 @@ export function FeedbackDialog({ open, onClose }) {
               </ol>
 
               <p className="guide-section-title">有問題或建議？</p>
-              <p className="guide-note">善用右上角的燈泡圖示開啟意見反饋。有疑問歡迎透過「<strong>問題</strong>」類型提交，會有專人定期回覆；有想法也歡迎透過「<strong>意見</strong>」類型分享。</p>
+              <p className="guide-note">善用右上角的燈泡圖示開啟網站指南與反饋。有疑問歡迎透過「<strong>問題</strong>」類型提交，會有專人定期回覆；有想法也歡迎透過「<strong>意見</strong>」類型分享。</p>
             </div>
           )}
 
