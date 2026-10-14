@@ -7,8 +7,11 @@ function responseError(response, body) {
 
 export function WorkflowQuestionBar({
   result,
-  onResultChange,
-  onSearchingChange,
+  onAiOpen,
+  onAiClose,
+  onSearchStart,
+  onSearchSuccess,
+  onSearchFailure,
   active,
   onToggle,
   visible,
@@ -45,8 +48,7 @@ export function WorkflowQuestionBar({
     controllerRef.current = controller
     sequenceRef.current = sequence
 
-    onResultChange(null)
-    onSearchingChange(true)
+    onSearchStart()
     setSubmittedQuestion(question)
     setDraft('')
     setExpanded(false)
@@ -72,12 +74,11 @@ export function WorkflowQuestionBar({
       }
       if (sequence !== sequenceRef.current) return
 
-      onResultChange({ question, summary: body.summary, cardIds: body.cardIds })
-      onSearchingChange(false)
+      onSearchSuccess({ question, summary: body.summary, cardIds: body.cardIds })
       setStatus('success')
     } catch (requestError) {
       if (requestError.name === 'AbortError' || sequence !== sequenceRef.current) return
-      onSearchingChange(false)
+      onSearchFailure()
       setStatus('error')
       setError(requestError.message || 'AI 服務目前無法使用，請稍後再試。')
     } finally {
@@ -89,8 +90,7 @@ export function WorkflowQuestionBar({
     controllerRef.current?.abort()
     controllerRef.current = null
     sequenceRef.current += 1
-    onSearchingChange(false)
-    onResultChange(null)
+    onAiClose()
     setDraft('')
     setSubmittedQuestion('')
     setExpanded(false)
@@ -98,25 +98,18 @@ export function WorkflowQuestionBar({
     setError('')
   }
 
-  function toggleComposer() {
-    if (expanded) {
-      setDraft('')
-      setExpanded(false)
-      return
-    }
-
-    if (status === 'loading') {
-      controllerRef.current?.abort()
-      controllerRef.current = null
-      sequenceRef.current += 1
-      onSearchingChange(false)
-      onResultChange(null)
-      setSubmittedQuestion('')
-      setStatus('idle')
-      setError('')
-    }
+  function openComposer() {
+    onAiOpen()
     setDraft('')
     setExpanded(true)
+  }
+
+  function toggleComposer() {
+    if (expanded || status === 'loading') {
+      handleClear()
+      return
+    }
+    openComposer()
   }
 
   const displayQuestion = status === 'loading' || status === 'error'
@@ -157,10 +150,7 @@ export function WorkflowQuestionBar({
                     maxLength={500}
                     onChange={event => setDraft(event.target.value)}
                     onKeyDown={event => {
-                      if (event.key === 'Escape') {
-                        setDraft('')
-                        setExpanded(false)
-                      }
+                      if (event.key === 'Escape') handleClear()
                     }}
                     placeholder="例如：Sprint 中發現 SPEC 要修改，該怎麼處理？"
                     autoComplete="off"
@@ -181,7 +171,10 @@ export function WorkflowQuestionBar({
                     <p className="ai-question-text"><strong>Q.</strong> {displayQuestion}</p>
                   )}
                   {status === 'loading' && (
-                    <p className="question-loading">規範搜尋中...</p>
+                    <p className="question-loading">
+                      <span className="question-loading-spinner" aria-hidden="true" />
+                      <span>規範搜尋中...</span>
+                    </p>
                   )}
                   {status === 'error' && (
                     <p className="question-error" role="alert">{error}</p>
@@ -195,7 +188,7 @@ export function WorkflowQuestionBar({
                 </div>
                 <div className="ai-status-actions">
                   {status === 'error' && (
-                    <button type="button" className="question-retry" onClick={() => setExpanded(true)}>
+                    <button type="button" className="question-retry" onClick={openComposer}>
                       重新提問
                     </button>
                   )}

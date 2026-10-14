@@ -69,6 +69,7 @@ export default function App() {
   const [active, setActive] = useState(loadFromStorage)
   const [aiResult, setAiResult] = useState(null)
   const [aiSearching, setAiSearching] = useState(false)
+  const [savedWorkflowFilters, setSavedWorkflowFilters] = useState(null)
   const [fieldsActive, setFieldsActive] = useState(FIELDS_EMPTY)
   const [autoActive, setAutoActive] = useState(AUTO_EMPTY)
 
@@ -121,8 +122,48 @@ export default function App() {
     })
   }
 
+  function restoreWorkflowFilters() {
+    if (savedWorkflowFilters) {
+      setActive({
+        role: new Set(savedWorkflowFilters.role),
+        phase: new Set(savedWorkflowFilters.phase),
+      })
+    }
+    setSavedWorkflowFilters(null)
+  }
+
+  function openAiHelper() {
+    setSavedWorkflowFilters(previous => previous ?? {
+      role: new Set(active.role),
+      phase: new Set(active.phase),
+    })
+    setActive({ role: new Set(), phase: new Set() })
+  }
+
+  function closeAiHelper() {
+    setAiSearching(false)
+    setAiResult(null)
+    restoreWorkflowFilters()
+  }
+
+  function startAiSearch() {
+    setAiResult(null)
+    setAiSearching(true)
+  }
+
+  function completeAiSearch(result) {
+    setAiResult(result)
+    setAiSearching(false)
+  }
+
+  function failAiSearch() {
+    setAiSearching(false)
+    setAiResult(null)
+    restoreWorkflowFilters()
+  }
+
   function changeMode(nextMode) {
-    if (mode === 'workflow' && nextMode !== 'workflow') setAiSearching(false)
+    if (mode === 'workflow' && nextMode !== 'workflow') closeAiHelper()
     setMode(nextMode)
   }
 
@@ -149,19 +190,17 @@ export default function App() {
   )
 
   const visibleCards = useMemo(() => {
-    if (aiSearching) return new Set()
     if (!aiCardIds) return manualVisibleCards
     return new Set([...manualVisibleCards].filter(id => aiCardIds.has(id)))
-  }, [aiCardIds, aiSearching, manualVisibleCards])
+  }, [aiCardIds, manualVisibleCards])
 
   const sectionRelevantCards = useMemo(() => {
-    if (aiSearching) return new Set()
     const withoutPhase = { ...active, phase: new Set() }
     return new Set(CARDS
       .filter(card => passesManualFilters(card, withoutPhase))
       .filter(card => !aiCardIds || aiCardIds.has(card.id))
       .map(card => card.id))
-  }, [active, aiCardIds, aiSearching])
+  }, [active, aiCardIds])
 
   const sections = useMemo(() => PHASES.map(phase => {
     const cards = CARDS.filter(card => (card.section ?? card.phases[0]) === phase.id)
@@ -203,8 +242,11 @@ export default function App() {
         {mode === 'workflow' && (
           <WorkflowQuestionBar
             result={aiResult}
-            onResultChange={setAiResult}
-            onSearchingChange={setAiSearching}
+            onAiOpen={openAiHelper}
+            onAiClose={closeAiHelper}
+            onSearchStart={startAiSearch}
+            onSearchSuccess={completeAiSearch}
+            onSearchFailure={failAiSearch}
             active={active}
             onToggle={toggleFilter}
             visible={totalVisible}
