@@ -2,9 +2,11 @@ import { WORKFLOW_CATALOG } from '../shared/workflowCatalog.js'
 import { WORKFLOW_CORPUS_TEXT } from '../shared/workflowCorpus.js'
 import { createLlmGatewayClient } from './_lib/llmGatewayClient.js'
 import { createWorkflowRecommendationHandler } from './_lib/workflowRecommendationHandler.js'
+import { createWorkflowSheetLogger } from './_lib/workflowSheetLogger.js'
 
 const handler = createWorkflowRecommendationHandler({
   gateway: createLlmGatewayClient(),
+  sheetLogger: createWorkflowSheetLogger(),
   catalog: WORKFLOW_CATALOG,
   corpus: WORKFLOW_CORPUS_TEXT,
 })

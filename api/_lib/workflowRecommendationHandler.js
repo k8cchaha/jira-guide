@@ -138,13 +138,15 @@ export function createWorkflowRecommendationHandler({
   gateway,
   catalog,
   corpus,
+  sheetLogger,
   logger = console,
   now = () => Date.now(),
 } = {}) {
   if (!gateway || !Array.isArray(catalog) || typeof corpus !== 'string') {
     throw new Error('Workflow recommendation handler dependencies are missing')
   }
-  const knownCardIds = new Set(catalog.map(card => card.id))
+  const cardsById = new Map(catalog.map(card => [card.id, card]))
+  const knownCardIds = new Set(cardsById.keys())
 
   return async function handle({ method, headers, body, requestId }) {
     const safeRequestId = requestId || crypto.randomUUID()
@@ -174,6 +176,24 @@ export function createWorkflowRecommendationHandler({
         userPrompt,
       })
       const result = validateGatewayResult(rawResult, knownCardIds)
+      let sheetLogStatus = 'skipped'
+      let sheetLogErrorType
+
+      if (sheetLogger?.append) {
+        try {
+          await sheetLogger.append({
+            timestamp: new Date(startedAt).toISOString(),
+            question: validated.question,
+            summary: result.summary,
+            cardTitles: result.cardIds.map(id => cardsById.get(id).title),
+          })
+          sheetLogStatus = 'succeeded'
+        } catch (error) {
+          sheetLogStatus = 'failed'
+          sheetLogErrorType = error?.name ?? 'Error'
+        }
+      }
+
       safeLog(logger, {
         event: 'workflow_recommendation',
         requestId: safeRequestId,
@@ -181,6 +201,8 @@ export function createWorkflowRecommendationHandler({
         durationMs: now() - startedAt,
         questionLength,
         resultCount: result.cardIds.length,
+        sheetLogStatus,
+        ...(sheetLogErrorType ? { sheetLogErrorType } : {}),
       })
       return jsonResult(200, result)
     } catch (error) {
