@@ -490,6 +490,9 @@ const qaTaskRules = {
           </td>
         </tr>
       </Tbl>
+      <Callout type="info" style={{ marginTop: 8 }}>
+        <strong>手動建立子單時</strong>，不需要也不應繼承母單的 <code>Labels</code>；自動建立的子單無需額外處理。
+      </Callout>
     </>
   ),
 }
