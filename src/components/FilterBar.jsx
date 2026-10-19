@@ -39,7 +39,7 @@ export function FilterBar({
           aria-controls="workflow-ai-panel"
         >
           <span aria-hidden="true">✦</span>
-          AI小幫手
+          AI 小幫手
         </button>
       </div>
 
@@ -99,7 +99,7 @@ export function FilterBar({
               aria-controls="workflow-ai-panel"
             >
               <span aria-hidden="true">✦</span>
-              AI小幫手
+              AI 小幫手
             </button>
           </div>
 
