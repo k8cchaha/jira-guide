@@ -120,6 +120,13 @@ export const AUTOMATIONS = [
     keywords: ['自動更新值'],
   },
   {
+    id: 'labels-by-sprint-board',
+    purpose: '讓 Android / iOS / Web 的票在掛上 Sprint 後，依 Sprint 所屬 Board 自動加上對應 Label，搭配 TKK / SUN Scrum board 的 Label 過濾條件，正確顯示於各自的看板',
+    trigger: 'Story / Task / Bug 的 Sprint 欄位值發生變更',
+    action: '發送 Jira API，查詢 Sprint ID 對應的 Board\n依查詢結果新增對應 Label：TKK → TELASA；SUN → SAKU\nBoard 設定（非 Automation 動作）：TKK / SUN Scrum board 需分別加入 TELASA / SAKU 的 Label 過濾條件',
+    keywords: ['特殊標記'],
+  },
+  {
     id: 'bug-sprint-by-due-date',
     purpose: '將被標記修復時間的 Bug 自動歸入對應的 Saku Sprint，省去手動設定 Sprint 的步驟',
     trigger: 'SUN 專案的 Bug 的 Due date 欄位被更新時',
