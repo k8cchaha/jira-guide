@@ -272,7 +272,8 @@ const impactScope = {
   id: 'impact-scope',
   content: (
     <>
-      <p><code>Impact Scope</code> 用來讓客戶掌握該張票是否涉及其關注的三個面向。請依實際變更範圍選擇 <strong>License / Playback / Reports</strong>，若同時涉及多個面向則分別選取。</p>
+      <p><strong>適用票種：</strong>Saku 的 <strong>Story / Task / Bug</strong> 皆須填寫 <code>Impact Scope</code>。</p>
+      <p><code>Impact Scope</code> 用來讓客戶掌握該張票是否涉及其關注的三個面向。請依實際變更範圍選擇 <strong>License / Playback / Reports</strong>，若同時涉及多個面向則分別選取。若未涉及上述任一面向，請選擇 <strong>Others</strong>。</p>
       <Tbl style={{ marginTop: 8 }}>
         <tr><th style={{ width: '18%' }}>面向</th><th>確認項目</th></tr>
         <tr>

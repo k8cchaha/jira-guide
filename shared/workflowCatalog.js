@@ -168,8 +168,8 @@ export const WORKFLOW_CATALOG = Object.freeze([
   }),
   card({
     id: 'impact-scope', title: '[Saku 專屬] Impact Scope 填寫規範', roles: ['PM', 'RD'], phases: ['in-sprint'], section: 'in-sprint', contexts: ['pm-planning', 'rd-dev', 'rd-bug'],
-    aliases: ['Impact Scope', 'License', 'Playback', 'Reports', 'Saku', '影響範圍'],
-    bodyText: 'Saku 的 Impact Scope 供客戶掌握變更影響，可複選 License、Playback、Reports。License 包含購買邏輯與流程、觀看權限、顯示邏輯、合約判定；Playback 是 Player 周邊任何變更；Reports 包含報表相關 Amplitude、CP/BI Reports，以及 Billing Logs、EST Integration Logs、Campaign Logs、CP/BI Reports 的產生邏輯。只要範圍有變更就須選取，包含程式碼修改、Refactoring、版本更新。',
+    aliases: ['Impact Scope', 'License', 'Playback', 'Reports', 'Others', 'Saku', '影響範圍'],
+    bodyText: 'Saku 的 Story、Task、Bug 皆須填寫 Impact Scope。Impact Scope 供客戶掌握變更影響，可複選 License、Playback、Reports。若未涉及上述任一面向，請選擇 Others。License 包含購買邏輯與流程、觀看權限、顯示邏輯、合約判定；Playback 是 Player 周邊任何變更；Reports 包含報表相關 Amplitude、CP/BI Reports，以及 Billing Logs、EST Integration Logs、Campaign Logs、CP/BI Reports 的產生邏輯。只要範圍有變更就須選取，包含程式碼修改、Refactoring、版本更新。',
   }),
   card({
     id: 'spec-change', title: 'SPEC Change 處理', roles: ['RD', 'PM'], phases: ['deploy'], section: 'deploy', contexts: ['rd-dev', 'pm-sprint'],
