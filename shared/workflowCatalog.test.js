@@ -7,7 +7,7 @@ const roles = new Set(['PM', 'RD', 'QA'])
 const phases = new Set(['foundation', 'pre-sprint', 'in-sprint', 'end-sprint', 'deploy'])
 
 test('workflow catalog has unique, valid, searchable cards', () => {
-  assert.equal(WORKFLOW_CATALOG.length, 33)
+  assert.equal(WORKFLOW_CATALOG.length, 34)
   assert.equal(new Set(WORKFLOW_CATALOG.map(card => card.id)).size, WORKFLOW_CATALOG.length)
 
   for (const card of WORKFLOW_CATALOG) {

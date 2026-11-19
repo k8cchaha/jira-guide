@@ -57,6 +57,11 @@ export const WORKFLOW_CATALOG = Object.freeze([
     bodyText: '需要 SRE、EP、SDET 支援時，PM 在 Epic Components 勾選團隊，再依是否需要跨環境驗證以 Automation 建立 Story 或 Task。系統在外部團隊 Project 建立工單，透過 Status Link 連動專案 DEV-Task；外部工單狀態變更會同步 DEV-Task 與需求單。PM、QA 只需追蹤專案需求單，不必另行跟催。',
   }),
   card({
+    id: 'pride-collaboration', title: 'Pride Team 協作流程（SUN / TKK）', roles: ['PM', 'RD'], phases: ['pre-sprint', 'in-sprint'], section: 'pre-sprint', contexts: ['pm-planning', 'pm-sprint', 'rd-dev'],
+    aliases: ['Pride', 'Pride Team', 'Pride Board', 'SUN', 'TKK', 'Saku', 'Telasa', '協作', '跨團隊', 'Component', 'Due date'],
+    bodyText: 'SUN、TKK 專案需要 Pride Team 協作時，PM 或 RD 直接在 SUN/TKK 開需求票，Components 選擇 Pride，並壓上 Due date。Pride Team 會在自己的 Pride Board 看到這張票並自行排入開發。整個過程中，PM 與 RD 只需關注這張 SUN/TKK 票的狀態，不需另外跟催。',
+  }),
+  card({
     id: 'spike', title: 'Spike 研究型任務', roles: ['RD', 'PM', 'QA'], phases: ['pre-sprint', 'in-sprint'], section: 'pre-sprint', contexts: ['rd-spike', 'pm-planning'],
     aliases: ['Spike', 'Pre-Spike', '研究任務', '技術研究', 'Custom Spike Task'],
     bodyText: 'Spike 使用 Task 母單。有 Epic 時用 Custom Pre-spike/Spike Task by Component 自動建立 DEV-Task 並帶 Dev Type；無 Epic 時手建 Task，Summary 加 [Spike] 或 [Pre-Spike]。內容必須寫明預期產出，多次討論可註明場數或 Milestone。研究完成後將 DEV-Task Done，母單自動 In Review 並 Assign Reporter；負責人 Review 後手動將母單 Done。',

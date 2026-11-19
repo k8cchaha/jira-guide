@@ -594,6 +594,47 @@ const crossTeamTracking = {
   ),
 }
 
+const prideCollaboration = {
+  id: 'pride-collaboration',
+  content: (
+    <>
+      <p>SUN / TKK 專案需要 <strong>Pride Team</strong> 協作時，不需另外開單跟催，直接在專案內開票即可：</p>
+      <Steps style={{ marginTop: 8 }}>
+        <li>需求票<strong>開在 SUN / TKK</strong> 專案</li>
+        <li><strong>Components</strong> 選擇 <code>Pride</code></li>
+        <li>壓上 <strong>Due date</strong></li>
+      </Steps>
+      <Tbl style={{ marginTop: 10 }}>
+        <tr><th style={{ width: '28%' }}>角色</th><th>要做的事</th></tr>
+        <tr>
+          <td><strong>PM / RD</strong></td>
+          <td>
+            <Bullets>
+              <li>依上述 SOP 開票</li>
+              <li>只需關注這張 SUN / TKK 票的狀態</li>
+            </Bullets>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Pride Team</strong></td>
+          <td>
+            <Bullets>
+              <li>在 <strong>Pride Board</strong> 上看到這張需求</li>
+              <li>自行排入開發，無需另外開單</li>
+            </Bullets>
+          </td>
+        </tr>
+      </Tbl>
+      <Callout type="info" style={{ marginTop: 8 }}>
+        過程中，PM / RD 都只需要關注這張 SUN / TKK 票即可。
+      </Callout>
+      <Callout type="warning" style={{ marginTop: 8 }}>
+        Due date 是 Pride Team 排程的依據，請務必確認後再送出。
+      </Callout>
+    </>
+  ),
+}
+
 const bugCreate = {
   id: 'bug-create',
   content: (
@@ -852,6 +893,7 @@ const CARD_PRESENTATIONS = [
   securityLevel,
   ticketCreation,
   crossTeamTracking,
+  prideCollaboration,
   spike,
   dor,
   estimatedEffort,
