@@ -607,7 +607,7 @@ const prideCollaboration = {
       <Tbl style={{ marginTop: 10 }}>
         <tr><th style={{ width: '28%' }}>角色</th><th>要做的事</th></tr>
         <tr>
-          <td><strong>PM / RD</strong></td>
+          <td><strong>PM</strong></td>
           <td>
             <Bullets>
               <li>依上述 SOP 開票</li>
